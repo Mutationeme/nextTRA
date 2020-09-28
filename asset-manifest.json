@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/nextTRA/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/nextTRA/static/js/main.c0b3a08d.chunk.js",
+    "main.js.map": "/nextTRA/static/js/main.c0b3a08d.chunk.js.map",
+    "runtime-main.js": "/nextTRA/static/js/runtime-main.672f0d78.js",
+    "runtime-main.js.map": "/nextTRA/static/js/runtime-main.672f0d78.js.map",
+    "static/js/2.219c9d2e.chunk.js": "/nextTRA/static/js/2.219c9d2e.chunk.js",
+    "static/js/2.219c9d2e.chunk.js.map": "/nextTRA/static/js/2.219c9d2e.chunk.js.map",
+    "index.html": "/nextTRA/index.html",
+    "precache-manifest.0805a0f01f29a34f33f0b92f70072be0.js": "/nextTRA/precache-manifest.0805a0f01f29a34f33f0b92f70072be0.js",
+    "service-worker.js": "/nextTRA/service-worker.js",
+    "static/css/main.5ecd60fb.chunk.css.map": "/nextTRA/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.219c9d2e.chunk.js.LICENSE.txt": "/nextTRA/static/js/2.219c9d2e.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.672f0d78.js",
+    "static/js/2.219c9d2e.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.c0b3a08d.chunk.js"
+  ]
+}
