@@ -134,7 +134,7 @@ function App() {
                                 stationList[0].map((data) => {
                                     let res = bsearch(data, 0, stations.Stations.length - 1);
 
-                                    if (res > 0) {
+                                    if (res >= 0) {
                                         return (
                                             <option key={data} value={data}>{stations.Stations[res].StationName.Zh_tw}</option>
                                         );
