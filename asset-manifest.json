@@ -1,22 +1,13 @@
 {
   "files": {
-    "main.css": "/nextTRA/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/nextTRA/static/js/main.94ecf6fd.chunk.js",
-    "main.js.map": "/nextTRA/static/js/main.94ecf6fd.chunk.js.map",
-    "runtime-main.js": "/nextTRA/static/js/runtime-main.672f0d78.js",
-    "runtime-main.js.map": "/nextTRA/static/js/runtime-main.672f0d78.js.map",
-    "static/js/2.219c9d2e.chunk.js": "/nextTRA/static/js/2.219c9d2e.chunk.js",
-    "static/js/2.219c9d2e.chunk.js.map": "/nextTRA/static/js/2.219c9d2e.chunk.js.map",
+    "main.css": "/nextTRA/static/css/main.e6c13ad2.css",
+    "main.js": "/nextTRA/static/js/main.21b6fa6f.js",
     "index.html": "/nextTRA/index.html",
-    "precache-manifest.bff587f9699d8601ff74acc3dcca6c87.js": "/nextTRA/precache-manifest.bff587f9699d8601ff74acc3dcca6c87.js",
-    "service-worker.js": "/nextTRA/service-worker.js",
-    "static/css/main.5ecd60fb.chunk.css.map": "/nextTRA/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.219c9d2e.chunk.js.LICENSE.txt": "/nextTRA/static/js/2.219c9d2e.chunk.js.LICENSE.txt"
+    "main.e6c13ad2.css.map": "/nextTRA/static/css/main.e6c13ad2.css.map",
+    "main.21b6fa6f.js.map": "/nextTRA/static/js/main.21b6fa6f.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.672f0d78.js",
-    "static/js/2.219c9d2e.chunk.js",
-    "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.94ecf6fd.chunk.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.21b6fa6f.js"
   ]
 }
