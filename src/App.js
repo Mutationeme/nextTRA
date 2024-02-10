@@ -1,9 +1,8 @@
 import React, { useState, /*useEffect*/ } from 'react';
-import { Form, Col, Container, Button, InputGroup } from 'react-bootstrap';
+import { Form, Row, Col, Container, Button, InputGroup } from 'react-bootstrap';
 
 import { getTrainByDate } from './request/index.js';
 import { timeFormat } from './time.js';
-import counties from './stationInfo/counties.json';
 import stations from './stationInfo/stations.json';
 
 import List from './components/List/list.js';
@@ -53,11 +52,8 @@ function App() {
         };
         let trains = [];
         getTrainByDate(arg).then((res) => {
-            if (!res.TrainTimetables) {
-                return;
-            }
-            res.TrainTimetables.forEach((train) => {
-                let trainTime = res.TrainDate + "T" + train.StopTimes[0].DepartureTime;
+            res.forEach((train) => {
+                let trainTime = train.TrainDate + "T" + train.OriginStopTime.DepartureTime;
                 let timeLag = (new Date(trainTime)).getTime() - time.getTime();
 
                 if (timeLag >= 0) {
@@ -92,14 +88,14 @@ function App() {
     return (
         <Container>
             <Form>
-                <Form.Row>
+                <Row>
                     <Form.Group as={Col}>
                         <Form.Label>From</Form.Label>
                         <Form.Control as="select"
                             onChange={(event) => {
                                 if (event.target.value !== "") {
                                     setCounty([event.target.value, county[1]]);
-                                    setList([counties[event.target.value].stations, stationList[1]]);
+                                    setList([stations[event.target.value].stations, stationList[1]]);
                                 }
                                 else {
                                     setCounty([null, county[1]]);
@@ -112,9 +108,9 @@ function App() {
                         >
                             <option value=""></option>
                             {
-                                counties.map((data, i) => {
+                                stations.map((data, i) => {
                                     return (
-                                        <option key={data.County} value={i}>{data.County}</option>
+                                        <option key={i} value={i}>{data.county}</option>
                                     );
                                 })
                             }
@@ -131,34 +127,27 @@ function App() {
                         >
                             <option value=""></option>
                             {
-                                stationList[0].map((data) => {
-                                    let res = bsearch(data, 0, stations.Stations.length - 1);
-
-                                    if (res >= 0) {
-                                        return (
-                                            <option key={data} value={data}>{stations.Stations[res].StationName.Zh_tw}</option>
-                                        );
-                                    }
-                                    else {
-                                        return null;
-                                    }
+                                stationList[0].map((data, i) => {
+                                    return (
+                                        <option key={i} value={data.StationID}>{data.StationName.Zh_tw}</option>
+                                    );
                                 })
                             }
                         </Form.Control>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                <Row>
                     <Form.Group as={Col}>
                         <Form.Label>To</Form.Label>
                         <Form.Control as="select"
                             onChange={(event) => {
                                 if (event.target.value !== "") {
-                                    setList([stationList[0], counties[event.target.value].stations]);
-                                    setCounty([county[0], event.target.value]);
+                                    setList([stationList[0], stations[event.target.value].stations]);
+                                    setCounty(["", event.target.value]);
                                 }
                                 else {
                                     setList([stationList[0], []]);
-                                    setCounty([county[0], null]);
+                                    setCounty(["", null]);
                                 }
                                 setArriv("");
                             }}
@@ -167,9 +156,9 @@ function App() {
                         >
                             <option value=""></option>
                             {
-                                counties.map((data, i) => {
+                                stations.map((data, i) => {
                                     return (
-                                        <option key={data.County} value={i}>{data.County}</option>
+                                        <option key={i} value={i}>{data.county}</option>
                                     );
                                 })
                             }
@@ -188,23 +177,16 @@ function App() {
                         >
                             <option value=""></option>
                             {
-                                stationList[1].map((data) => {
-                                    let res = bsearch(data, 0, stations.Stations.length - 1);
-
-                                    if (res >= 0) {
+                                stationList[1].map((data, i) => {
                                         return (
-                                            <option key={data} value={data}>{stations.Stations[res].StationName.Zh_tw}</option>
+                                            <option key={i} value={data.StationID}>{data.StationName.Zh_tw}</option>
                                         );
-                                    }
-                                    else {
-                                        return null;
-                                    }
                                 })
                             }
                         </Form.Control>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                <Row>
                     <Form.Group as={Col}>
                         <Form.Label>Date</Form.Label>
                         <InputGroup>
@@ -217,13 +199,11 @@ function App() {
                                     setTime(new Date(event.target.value));
                                 }}
                             />
-                            <InputGroup.Append>
-                                <Button type="button" variant="outline-secondary" onClick={() => { setTime(new Date()) }}>Now</Button>
-                            </InputGroup.Append>
+                            <Button type="button" variant="outline-secondary" onClick={() => { setTime(new Date()) }}>Now</Button>
                         </InputGroup>
                     </Form.Group>
-                </Form.Row>
-                <Form.Row>
+                </Row>
+                <Row>
                     <Form.Group as={Col} xs="4">
                         <Form.Label>&nbsp;</Form.Label>
                         <Button
@@ -246,7 +226,7 @@ function App() {
                             }
                         >
                             互換
-                    </Button>
+                        </Button>
                     </Form.Group>
                     <Form.Group as={Col} >
                         <Form.Label>&nbsp;</Form.Label>
@@ -258,10 +238,10 @@ function App() {
                             onClick={handleSubmit}
                         >
                             查詢
-                    </Button>
+                        </Button>
                     </Form.Group>
-                </Form.Row>
-            </Form >
+                </Row>
+            </Form>
 
             <List trains={result} />
 

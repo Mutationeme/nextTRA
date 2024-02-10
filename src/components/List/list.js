@@ -3,8 +3,8 @@ import { ListGroup } from 'react-bootstrap';
 
 function List(props) {
     function travelTime(train) {
-        let departureTime = train.StopTimes[0].DepartureTime.split(':');
-        let arrivalTime = train.StopTimes[1].ArrivalTime.split(':');
+        let departureTime = train.OriginStopTime.DepartureTime.split(':');
+        let arrivalTime = train.DestinationStopTime.ArrivalTime.split(':');
 
         let timeLag = parseInt(arrivalTime[0], 10) * 60 + parseInt(arrivalTime[1], 10) - parseInt(departureTime[0], 10) * 60 - parseInt(departureTime[1], 10);
 
@@ -34,24 +34,24 @@ function List(props) {
             {
                 props.trains.map((train) => {
                     return (
-                        <ListGroup horizontal key={train.TrainInfo.TrainNo} style={{ margin: "1vh 0" }}>
+                        <ListGroup horizontal key={train.DailyTrainInfo.TrainNo} style={{ margin: "1vh 0" }}>
                             <ListGroup.Item style={{ padding: "0.5rem", width: "25%", backgroundColor:"#f2f2f2" }}>
-                                <div style={textAlignCenter}>{train.TrainInfo.TrainTypeName.Zh_tw.split('(')[0]}</div>
-                                <div style={textAlignCenter}>{train.TrainInfo.TrainNo}</div>
+                                <div style={textAlignCenter}>{train.DailyTrainInfo.TrainTypeName.Zh_tw}</div>
+                                <div style={textAlignCenter}>{train.DailyTrainInfo.TrainNo}</div>
                             </ListGroup.Item>
                             <ListGroup.Item style={{ padding: "0.5rem", width: "20%", backgroundColor:"#f2f2f2" }}>
-                                <div style={textAlignCenter}>{train.StopTimes[0].StationName.Zh_tw}</div>
-                                <div style={textAlignCenter}>{train.StopTimes[0].DepartureTime}</div>
+                                <div style={textAlignCenter}>{train.OriginStopTime.StationName.Zh_tw}</div>
+                                <div style={textAlignCenter}>{train.OriginStopTime.DepartureTime}</div>
                             </ListGroup.Item>
                             <ListGroup.Item style={{ padding: "0.5rem", width: "20%", backgroundColor:"#f2f2f2" }}>
-                                <div style={textAlignCenter}>{train.StopTimes[1].StationName.Zh_tw}</div>
-                                <div style={textAlignCenter}>{train.StopTimes[1].ArrivalTime}</div>
+                                <div style={textAlignCenter}>{train.DestinationStopTime.StationName.Zh_tw}</div>
+                                <div style={textAlignCenter}>{train.DestinationStopTime.ArrivalTime}</div>
                             </ListGroup.Item>
                             <ListGroup.Item style={{ padding: "0.5rem", width: "10%", backgroundColor:"#f2f2f2" }}>
                                 <div style={textAlignCenter}>
                                     {
                                         (() => {
-                                            let line = train.TrainInfo.TripLine;
+                                            let line = train.DailyTrainInfo.TripLine;
                                             if (line === 1) {
                                                 return "山";
                                             }
