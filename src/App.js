@@ -15,28 +15,6 @@ function App() {
     const [time, setTime] = useState(new Date());
     const [result, setResult] = useState([]);
 
-    function bsearch(target, start, end) {
-        //Binary search
-        if (start > end) {
-            return -1;
-        }
-
-        let mid = Math.floor((start + end) / 2);
-        let id = stations.Stations[mid].StationID;
-
-        if (id === target) {
-            return mid;
-        }
-        else if (parseInt(id, 10) < parseInt(target, 10)) {
-            return bsearch(target, mid + 1, end);
-        }
-        else {
-            return bsearch(target, start, mid - 1);
-        }
-    }
-
-
-
     function addDay(date, days) {
         //PTX API only provide date within 60 days
         let result = new Date(date);
@@ -143,11 +121,11 @@ function App() {
                             onChange={(event) => {
                                 if (event.target.value !== "") {
                                     setList([stationList[0], stations[event.target.value].stations]);
-                                    setCounty(["", event.target.value]);
+                                    setCounty([county[0], event.target.value]);
                                 }
                                 else {
                                     setList([stationList[0], []]);
-                                    setCounty(["", null]);
+                                    setCounty([county[0], null]);
                                 }
                                 setArriv("");
                             }}
