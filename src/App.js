@@ -1,4 +1,4 @@
-import React, { useState, /*useEffect*/ } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Container, Button, InputGroup } from 'react-bootstrap';
 
 import { getTrainByDate } from './request/index.js';
@@ -6,6 +6,8 @@ import { timeFormat } from './time.js';
 import stations from './stationInfo/stations.json';
 
 import List from './components/List/list.js';
+import Footer from "./components/Footer/footer.js"
+import Select from './components/Select/select.js';
 
 function App() {
     const [departure, setDepart] = useState("");
@@ -14,6 +16,59 @@ function App() {
     const [stationList, setList] = useState([[], []]);
     const [time, setTime] = useState(new Date());
     const [result, setResult] = useState([]);
+
+    //
+    const [schedule, setSchedule] = useState({
+        origin: {
+            countyIdx: -1,
+            stationID: ""
+        },
+        destination: {
+            countyIdx: -1,
+            stationID: ""
+        }
+    });
+
+    function selectOriginCounty(index) {
+        setSchedule({
+            origin: {
+                countyIdx: index,
+                stationID: ""
+            },
+            destination: schedule.destination
+        });
+    }
+
+    function selectDestinationCounty(index) {
+        setSchedule({
+            origin: schedule.origin,
+            destination: {
+                countyIdx: index,
+                stationID: ""
+            }
+        });
+    }
+
+    function selectOriginStation(id) {
+        setSchedule({
+            origin: {
+                countyIdx: schedule.origin.countyIdx,
+                stationID: id
+            },
+            destination: schedule.destination
+        });
+    }
+
+    function selectDestinationStation(id) {
+        setSchedule({
+            origin: schedule.origin,
+            destination: {
+                countyIdx: schedule.destination.countyIdx,
+                stationID: id
+            }
+        });
+    }
+    //
 
     function addDay(date, days) {
         //PTX API only provide date within 60 days
@@ -47,124 +102,31 @@ function App() {
             setResult(trains);
         })
     }
-    const footerStyle = {
-        position: "relative",
-        left: "0",
-        bottom: "0",
-        width: "100%",
-        textAlign: "cneter",
-        color: "lightgray"
-    };
-    /*
+    
     useEffect(() => {
-        console.log("Dep: " + departure);
-        console.log("Arr: " + arrival);
-        console.log("Tim: " + time);
-        console.log("res: "+result);
-    }, [departure, arrival, time, result])
-    */
+        console.log(schedule);
+    }, [schedule])
+    
     return (
         <Container>
             <Form>
-                <Row>
-                    <Form.Group as={Col}>
-                        <Form.Label>From</Form.Label>
-                        <Form.Control as="select"
-                            onChange={(event) => {
-                                if (event.target.value !== "") {
-                                    setCounty([event.target.value, county[1]]);
-                                    setList([stations[event.target.value].stations, stationList[1]]);
-                                }
-                                else {
-                                    setCounty([null, county[1]]);
-                                    setList([[], stationList[1]]);
-                                }
-                                setDepart("");
-                            }}
-                            value={county[0]}
-                            required
-                        >
-                            <option value=""></option>
-                            {
-                                stations.map((data, i) => {
-                                    return (
-                                        <option key={i} value={i}>{data.county}</option>
-                                    );
-                                })
-                            }
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                        <Form.Label>&nbsp;</Form.Label>
-                        <Form.Control as="select"
-                            onChange={(event) => {
-                                setDepart(event.target.value);
-                            }}
-                            value={departure}
-                            required
-                        >
-                            <option value=""></option>
-                            {
-                                stationList[0].map((data, i) => {
-                                    return (
-                                        <option key={i} value={data.StationID}>{data.StationName.Zh_tw}</option>
-                                    );
-                                })
-                            }
-                        </Form.Control>
-                    </Form.Group>
-                </Row>
-                <Row>
-                    <Form.Group as={Col}>
-                        <Form.Label>To</Form.Label>
-                        <Form.Control as="select"
-                            onChange={(event) => {
-                                if (event.target.value !== "") {
-                                    setList([stationList[0], stations[event.target.value].stations]);
-                                    setCounty([county[0], event.target.value]);
-                                }
-                                else {
-                                    setList([stationList[0], []]);
-                                    setCounty([county[0], null]);
-                                }
-                                setArriv("");
-                            }}
-                            value={county[1]}
-                            required
-                        >
-                            <option value=""></option>
-                            {
-                                stations.map((data, i) => {
-                                    return (
-                                        <option key={i} value={i}>{data.county}</option>
-                                    );
-                                })
-                            }
-                        </Form.Control>
-                    </Form.Group>
+                <Select
+                    label={"From"}
+                    countyIdx={schedule.origin.countyIdx}
+                    station={schedule.origin.stationID}
+                    selectCounty={selectOriginCounty}
+                    selectStation={selectOriginStation}
+                />
 
+                <Select
+                    label={"To"}
+                    countyIdx={schedule.destination.countyIdx}
+                    station={schedule.destination.stationID}
+                    selectCounty={selectDestinationCounty}
+                    selectStation={selectDestinationStation}
+                />
 
-                    <Form.Group as={Col}>
-                        <Form.Label>&nbsp;</Form.Label>
-                        <Form.Control as="select"
-                            onChange={(event) => {
-                                setArriv(event.target.value);
-                            }}
-                            value={arrival}
-                            required
-                        >
-                            <option value=""></option>
-                            {
-                                stationList[1].map((data, i) => {
-                                        return (
-                                            <option key={i} value={data.StationID}>{data.StationName.Zh_tw}</option>
-                                        );
-                                })
-                            }
-                        </Form.Control>
-                    </Form.Group>
-                </Row>
-                <Row>
+                {/* <Row>
                     <Form.Group as={Col}>
                         <Form.Label>Date</Form.Label>
                         <InputGroup>
@@ -218,14 +180,12 @@ function App() {
                             查詢
                         </Button>
                     </Form.Group>
-                </Row>
+                </Row> */}
             </Form>
 
-            <List trains={result} />
+            {/* <List trains={result} /> */}
 
-            <div id="footer" style={footerStyle}>
-                資料來源: 交通部PTX平臺/2020/v3
-            </div>
+            <Footer />
         </Container>
     );
 }
