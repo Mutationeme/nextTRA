@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
 import stations from '../../stationInfo/stations.json';
@@ -13,7 +13,10 @@ import stations from '../../stationInfo/stations.json';
 */
 
 function Select(props) {
-    const [stationList, setStationList] = useState([]);
+    
+    useEffect(() => {
+        //console.log(props);
+    }, [props, props.countyIdx]);
 
     // station list under county is sorted ascented.
     function bsearchStation(array, target, start, end) {
@@ -37,39 +40,88 @@ function Select(props) {
         }
     }
 
+    function getDefaultCounty() {
+        if (props.countyIdx != undefined &&
+            props.countyIdx >= 0 &&
+            props.countyIdx < stations.length
+        ) {
+            return stations[props.countyIdx].county;
+        }
+        else {
+            return "";
+        }
+    }
+
+    function getDefaultStation() {
+        if (props.countyIdx != undefined &&
+            props.countyIdx >= 0 &&
+            props.countyIdx < stations.length &&
+
+            props.station != undefined &&
+            props.station !== "" &&
+            // bsearch stations
+            bsearchStation(stations[props.countyIdx].stations, props.station, 0, stations[props.countyIdx].stations.length - 1) >= 0
+        ) {
+            return props.station;
+        }
+        else {
+            return "";
+        }
+    }
+
+    function setStationListByCountyIdx(countyIdx) {
+        if (countyIdx != undefined &&
+            countyIdx >= 0 &&
+            countyIdx < stations.length
+        ) {
+            return (
+                stations[countyIdx].stations.map((data, i) => {
+                    return <option key={i} value={data.StationID}>{data.StationName.Zh_tw}</option>;
+                })
+            );
+        }
+        else {
+            return null;
+        }
+    }
+
+    function handleCountyChange(event) {
+        if (event.target != undefined &&
+            event.target.selectedIndex != undefined &&
+            event.target.value != undefined &&
+
+            // check if index in the range of 0 ~ legnth + 1 ([0]: "")
+            event.target.selectedIndex >= 0 &&
+            event.target.selectedIndex <= stations.length
+        ) {
+            // seletedIndex [0] is the default blank option
+            props.selectCounty(event.target.selectedIndex - 1);
+        }
+    }
+
+    function handleStationChange(event) {
+        if (event.target.value != undefined &&
+            event.target.value !== "" &&
+
+            props.countyIdx != undefined &&
+            props.countyIdx >= 0 &&
+            props.countyIdx < stations.length &&
+
+            event.target.selectedIndex > 0 &&
+            event.target.selectedIndex <= stations[props.countyIdx].stations.length &&
+            stations[props.countyIdx].stations[event.target.selectedIndex - 1].StationID === event.target.value
+        ) {
+            props.selectStation(event.target.value);
+        }
+    }
+
     return (
         <Row>
             <Form.Group as={Col}>
                 <Form.Label>{props.label}</Form.Label>
                 <Form.Control as="select"
-                    onChange={(event) => {
-                        if (event.target != undefined &&
-                            event.target.selectedIndex &&
-                            event.target.value &&
-
-                            // check if index in the range of 0 ~ legnth + 1 ([0]: "")
-                            event.target.selectedIndex >= 0 &&
-                            event.target.selectedIndex <= stations.length
-                        ) {
-                            // seletedIndex [0] is the default blank option
-                            props.selectCounty(event.target.selectedIndex - 1);
-
-                            //
-                            setStationList(stations[event.target.selectedIndex - 1].stations);
-                        }
-                    }}
-                    defaultValue={() => {
-                        if (props.countyIdx != undefined &&
-                            props.countyIdx >= 0 &&
-                            props.countyIdx < stations.length
-                        ) {
-                            return stations[props.countyIdx].county;
-                        }
-                        else {
-                            //default value
-                            return "";
-                        }
-                    }}
+                    onChange={handleCountyChange}
+                    value={getDefaultCounty()}
                     required
                 >
                     <option value=""></option>
@@ -85,63 +137,13 @@ function Select(props) {
             <Form.Group as={Col}>
                 <Form.Label>&nbsp;</Form.Label>
                 <Form.Control as="select"
-                    onChange={(event) => {
-                        console.log(event);
-                        if (event.target.value != undefined &&
-                            event.target.value !== "" &&
-
-                            props.countyIdx &&
-                            props.countyIdx >= 0 &&
-                            props.countyIdx < stations.length &&
-
-                            event.target.selectedIndex > 0 &&
-                            event.target.selectedIndex <= stations[props.countyIdx].stations.length &&
-                            stations[props.countyIdx].stations[event.target.selectedIndex - 1].StationID === event.target.value
-                        ) {
-                            props.selectStation(event.target.value);
-                        }
-                    }}
-                    defaultValue={() => {
-                        // check if props.station in the station list.
-                        if (props.countyIdx != undefined &&
-                            props.countyIdx >= 0 &&
-                            props.countyIdx < stations.length &&
-
-                            props.station &&
-                            props.station !== "" &&
-                            // bsearch stations
-                            bsearchStation(stations[props.countyIdx].stations, props.station, 0, stations[props.countyIdx].stations.length - 1) >= 0
-                        ) {
-                            return props.station;
-                        }
-                        else {
-                            return "";
-                        }
-                    }}
+                    onChange={handleStationChange}
+                    value={getDefaultStation()}
                     required
                 >
                     <option value=""></option>
                     {
-                        // (() => {
-                        //     if (
-                        //         props.countyIdx != undefined &&
-                        //         props.countyIdx >= 0 &&
-                        //         props.countyIdx < stations.length
-                        //     ) {
-                        //         return (stations[props.countyIdx].stations.map((data, i) => {
-                        //             console.log(data);
-                        //             <option key={data.StationID} value={data.StationID}>{data.StationName.Zh_tw}</option>
-                        //         }));
-                        //     }
-                        //     else
-                        //     {
-                        //         return null;
-                        //     }
-                        // })()
-
-                        stationList.map((data) => {
-                            return <option key={data.StationID} value={data.StationID}>{data.StationName.Zh_tw}</option>
-                        })
+                        setStationListByCountyIdx(props.countyIdx)
                     }
                 </Form.Control>
             </Form.Group>

@@ -23,18 +23,18 @@ const getStations = async () => {
 }
 
 /*
-** example: curl -X 'GET' \
+** Query the TDX by train innformations and get the train schedule of the target date.
+** arguments:
+**  info:
+**      departure: "String",
+**      arrival: "String",
+**      date: "Date"
+** command:
+**  curl -X 'GET' \
 **  'https://tdx.transportdata.tw/api/basic/v2/Rail/TRA/DailyTimetable/OD/0900/to/0910/2024-02-11?%24format=JSON' \
 **  -H 'accept: application/json'
 */
-const getTrainByDate = async (info) => {
-    /*
-    info:{
-        departure: "String",
-        arrival: "String"
-        date: "Date"
-    }
-    */
+async function getTrainByDate(info) {
     let reqOption = {
         method: "GET",
         headers: {
@@ -44,14 +44,13 @@ const getTrainByDate = async (info) => {
     };
     let URLi = URL + "DailyTimetable/OD/" + info.departure + "/to/" + info.arrival + "/" + timeFormat(info.date).split('T')[0] + "?$format=JSON";
 
-    console.log(reqOption);
-
     try {
         let response = await fetch(URLi, reqOption);
+        //console.log(response);
         return response.json();
     }
     catch (error) {
-        console.error(error);
+        //console.error(error);
     }
 }
 

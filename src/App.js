@@ -2,22 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Container, Button, InputGroup } from 'react-bootstrap';
 
 import { getTrainByDate } from './request/index.js';
-import { timeFormat } from './time.js';
+import { timeFormat, timeDifference } from './time.js';
 import stations from './stationInfo/stations.json';
 
 import List from './components/List/list.js';
 import Footer from "./components/Footer/footer.js"
 import Select from './components/Select/select.js';
+import TimeSelect from './components/TimeSelect/TimeSelect.js';
+import Buttons from "./components/Buttons/Buttons.js"
 
 function App() {
-    const [departure, setDepart] = useState("");
-    const [arrival, setArriv] = useState("");
-    const [county, setCounty] = useState(["", ""]);
-    const [stationList, setList] = useState([[], []]);
-    const [time, setTime] = useState(new Date());
-    const [result, setResult] = useState([]);
-
-    //
+    
     const [schedule, setSchedule] = useState({
         origin: {
             countyIdx: -1,
@@ -26,7 +21,20 @@ function App() {
         destination: {
             countyIdx: -1,
             stationID: ""
-        }
+        },
+        time: new Date()
+    });
+
+    const [scheduleResult, setScheduleResult] = useState({
+        origin: {
+            stationID: -1,
+            stationName: ""
+        },
+        destination: {
+            stationID: -1,
+            stationName: ""
+        },
+        trains: []
     });
 
     function selectOriginCounty(index) {
@@ -35,7 +43,8 @@ function App() {
                 countyIdx: index,
                 stationID: ""
             },
-            destination: schedule.destination
+            destination: schedule.destination,
+            time: schedule.time
         });
     }
 
@@ -45,7 +54,8 @@ function App() {
             destination: {
                 countyIdx: index,
                 stationID: ""
-            }
+            },
+            time: schedule.time
         });
     }
 
@@ -55,7 +65,8 @@ function App() {
                 countyIdx: schedule.origin.countyIdx,
                 stationID: id
             },
-            destination: schedule.destination
+            destination: schedule.destination,
+            time: schedule.time
         });
     }
 
@@ -65,51 +76,104 @@ function App() {
             destination: {
                 countyIdx: schedule.destination.countyIdx,
                 stationID: id
-            }
+            },
+            time: schedule.time
         });
+    }
+
+    function selectTime(time) {
+        setSchedule({
+            origin: schedule.origin,
+            destination: schedule.destination,
+            time: time
+        });
+    }
+
+    function handleSwap() {
+        let origin = schedule.origin
+        let destination = schedule.destination;
+        let time = schedule.time;
+        setSchedule({
+            origin: destination,
+            destination: origin,
+            time: time
+        });
+    }
+
+    /*
+    ** args:
+    **  result: json 
+    */
+    function handleScheduleResult(result, option) {
+        if (result.length === 0) {
+            return;
+        }
+
+        let newScheduleResult = {
+            origin: {
+                stationID: result[0].OriginStopTime.StationID,
+                stationName: result[0].OriginStopTime.StationName.Zh_tw
+            },
+            destination: {
+                stationID: result[0].DestinationStopTime.StationID,
+                stationName: result[0].DestinationStopTime.StationName.Zh_tw
+            },
+            trains: []
+        };
+
+        for (let i = 0; i < result.length; i++) {
+            let trainTime = new Date(result[i].TrainDate + "T" + result[i].OriginStopTime.DepartureTime);
+            if(timeDifference(trainTime, option.time) >= 0)
+            {
+                newScheduleResult.trains.push({
+                    trainNo: result[i].DailyTrainInfo.TrainNo,
+                    trainType: result[i].DailyTrainInfo.TrainTypeName.Zh_tw,
+                    DepartureTime: result[i].OriginStopTime.DepartureTime,
+                    ArrivalTime: result[i].DestinationStopTime.ArrivalTime,
+                    TripLine: result[i].DailyTrainInfo.TripLine
+                })
+            }
+        }
+
+        setScheduleResult(newScheduleResult);
     }
     //
 
-    function addDay(date, days) {
-        //PTX API only provide date within 60 days
-        let result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
+    // function handleSubmit() {
+    //     let arg = {
+    //         departure: departure,
+    //         arrival: arrival,
+    //         date: time
+    //     };
+    //     let trains = [];
+    //     getTrainByDate(arg).then((res) => {
+    //         res.forEach((train) => {
+    //             let trainTime = train.TrainDate + "T" + train.OriginStopTime.DepartureTime;
+    //             let timeLag = (new Date(trainTime)).getTime() - time.getTime();
 
-    function handleSubmit() {
-        let arg = {
-            departure: departure,
-            arrival: arrival,
-            date: time
-        };
-        let trains = [];
-        getTrainByDate(arg).then((res) => {
-            res.forEach((train) => {
-                let trainTime = train.TrainDate + "T" + train.OriginStopTime.DepartureTime;
-                let timeLag = (new Date(trainTime)).getTime() - time.getTime();
+    //             if (timeLag >= 0) {
+    //                 trains.push({
+    //                     timeLag: timeLag,
+    //                     ...train
+    //                 });
+    //             }
+    //         })
+    //         trains.sort((a, b) => {
+    //             return a.timeLag - b.timeLag;
+    //         })
+    //         setResult(trains);
+    //     })
+    // }
 
-                if (timeLag >= 0) {
-                    trains.push({
-                        timeLag: timeLag,
-                        ...train
-                    });
-                }
-            })
-            trains.sort((a, b) => {
-                return a.timeLag - b.timeLag;
-            })
-            setResult(trains);
-        })
-    }
-    
     useEffect(() => {
         console.log(schedule);
-    }, [schedule])
-    
+        console.log(scheduleResult);
+    }, [schedule, scheduleResult])
+
     return (
         <Container>
             <Form>
+                {/* CountyStationSelect */}
                 <Select
                     label={"From"}
                     countyIdx={schedule.origin.countyIdx}
@@ -126,63 +190,20 @@ function App() {
                     selectStation={selectDestinationStation}
                 />
 
-                {/* <Row>
-                    <Form.Group as={Col}>
-                        <Form.Label>Date</Form.Label>
-                        <InputGroup>
-                            <Form.Control
-                                type="datetime-local"
-                                value={timeFormat(time)}
-                                min={timeFormat(new Date()).slice(0, 10) + "T00:00"}
-                                max={timeFormat(addDay(new Date(), 60)).slice(0, 10) + "T23:59"}
-                                onChange={(event) => {
-                                    setTime(new Date(event.target.value));
-                                }}
-                            />
-                            <Button type="button" variant="outline-secondary" onClick={() => { setTime(new Date()) }}>Now</Button>
-                        </InputGroup>
-                    </Form.Group>
-                </Row>
-                <Row>
-                    <Form.Group as={Col} xs="4">
-                        <Form.Label>&nbsp;</Form.Label>
-                        <Button
-                            variant="outline-info"
-                            type="button"
-                            size="lg"
-                            style={{ width: "100%" }}
-                            onClick={
-                                () => {
-                                    let temp = arrival;
-                                    setArriv(departure);
-                                    setDepart(temp);
+                <TimeSelect
+                    time={schedule.time}
+                    selectTime={selectTime}
+                />
 
-                                    temp = county[0];
-                                    setCounty([county[1], temp]);
-
-                                    temp = stationList[0];
-                                    setList([stationList[1], temp]);
-                                }
-                            }
-                        >
-                            互換
-                        </Button>
-                    </Form.Group>
-                    <Form.Group as={Col} >
-                        <Form.Label>&nbsp;</Form.Label>
-                        <Button
-                            variant="dark"
-                            type="button"
-                            size="lg"
-                            style={{ width: "100%" }}
-                            onClick={handleSubmit}
-                        >
-                            查詢
-                        </Button>
-                    </Form.Group>
-                </Row> */}
+                {/* ActionButtons */}
+                <Buttons
+                    scheduleOptions={schedule}
+                    handleSwap={handleSwap}
+                    handleSubmit={handleScheduleResult}
+                />
             </Form>
 
+            {/* TrainList */}
             {/* <List trains={result} /> */}
 
             <Footer />

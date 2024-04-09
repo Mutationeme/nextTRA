@@ -20,4 +20,8 @@ const timeFormat = (date) => {
     return year + '-' + month + '-' + dat + 'T' + hour + ':' + minute;
 }
 
-export {timeFormat};
+const timeDifference = (time1, time2) => {
+    return time1.getTime() - time2.getTime();
+}
+
+export { timeFormat, timeDifference };
