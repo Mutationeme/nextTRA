@@ -1,73 +1,72 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
+import { getTravelTime } from '../../time.js'
+
+import './list.css';
 
 function List(props) {
-    function travelTime(train) {
-        let departureTime = train.OriginStopTime.DepartureTime.split(':');
-        let arrivalTime = train.DestinationStopTime.ArrivalTime.split(':');
+    function travelTimeToElement(departureTime, arrivalTime) {
+        console.log(departureTime);
+        let travelTime = getTravelTime(departureTime, arrivalTime);
 
-        let timeLag = parseInt(arrivalTime[0], 10) * 60 + parseInt(arrivalTime[1], 10) - parseInt(departureTime[0], 10) * 60 - parseInt(departureTime[1], 10);
-
-        if (timeLag < 0) {
-            timeLag += 24 * 60;
-        }
         return (
             <div>
-                <div style={textAlignCenter}>
+                <div className='textAlignCenter'>
                     {
-                        (parseInt(timeLag / 60) < 10 ? ("0" + parseInt(timeLag / 60)) : parseInt(timeLag / 60)) + "時"
+                        travelTime[0].toString().padStart(2, '0') + "時"
                     }
                 </div>
-                <div style={textAlignCenter}>
-                    {timeLag % 60 + "分"}
+                <div className='textAlignCenter'>
+                    {
+                        travelTime[1].toString().padStart(2, '0') + "分"
+                    }
                 </div>
             </div>
         );
     }
 
-    const textAlignCenter = {
-        textAlign: "center"
+    function tripLineToText(tripLine) {
+        if (tripLine === 1) {
+            return "山";
+        }
+        else if (tripLine === 2) {
+            return "海";
+        }
+        else {
+            return " ";
+        }
     }
+    //console.log(props.trains.trains);
 
     return (
         <div>
             {
-                props.trains.map((train) => {
+                props.trains.trains.map((train) => {
+                    //console.log(train);
                     return (
-                        <ListGroup horizontal key={train.DailyTrainInfo.TrainNo} style={{ margin: "1vh 0" }}>
-                            <ListGroup.Item style={{ padding: "0.5rem", width: "25%", backgroundColor:"#f2f2f2" }}>
-                                <div style={textAlignCenter}>{train.DailyTrainInfo.TrainTypeName.Zh_tw}</div>
-                                <div style={textAlignCenter}>{train.DailyTrainInfo.TrainNo}</div>
+                        <ListGroup horizontal className='train'>
+                            <ListGroup.Item className='trainNo'>
+                                <div className='textAlignCenter'>{train.trainType}</div>
+                                <div className='textAlignCenter'>{train.trainNo}</div>
                             </ListGroup.Item>
-                            <ListGroup.Item style={{ padding: "0.5rem", width: "20%", backgroundColor:"#f2f2f2" }}>
-                                <div style={textAlignCenter}>{train.OriginStopTime.StationName.Zh_tw}</div>
-                                <div style={textAlignCenter}>{train.OriginStopTime.DepartureTime}</div>
+                            <ListGroup.Item className='trainDepart'>
+                                <div className='textAlignCenter'>{props.trains.origin.stationName}</div>
+                                <div className='textAlignCenter'>{train.departureTime}</div>
                             </ListGroup.Item>
-                            <ListGroup.Item style={{ padding: "0.5rem", width: "20%", backgroundColor:"#f2f2f2" }}>
-                                <div style={textAlignCenter}>{train.DestinationStopTime.StationName.Zh_tw}</div>
-                                <div style={textAlignCenter}>{train.DestinationStopTime.ArrivalTime}</div>
+                            <ListGroup.Item className='trainArrive'>
+                                <div className='textAlignCenter'>{props.trains.destination.stationName}</div>
+                                <div className='textAlignCenter'>{train.arrivalTime}</div>
                             </ListGroup.Item>
-                            <ListGroup.Item style={{ padding: "0.5rem", width: "10%", backgroundColor:"#f2f2f2" }}>
-                                <div style={textAlignCenter}>
+                            <ListGroup.Item className='trainTripLine'>
+                                <div className='textAlignCenter'>
                                     {
-                                        (() => {
-                                            let line = train.DailyTrainInfo.TripLine;
-                                            if (line === 1) {
-                                                return "山";
-                                            }
-                                            else if (line === 2) {
-                                                return "海"
-                                            }
-                                            else {
-                                                return " ";
-                                            }
-                                        })()
+                                        tripLineToText(train.tripLine)
                                     }
                                 </div>
                             </ListGroup.Item>
-                            <ListGroup.Item style={{ padding: "0.5rem", width: "25%", backgroundColor:"#f2f2f2" }}>
+                            <ListGroup.Item className='trainTravelTime'>
                                 {
-                                    travelTime(train)
+                                    travelTimeToElement(train.departureTime, train.arrivalTime)
                                 }
                             </ListGroup.Item>
                         </ListGroup>

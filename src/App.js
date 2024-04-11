@@ -128,9 +128,9 @@ function App() {
                 newScheduleResult.trains.push({
                     trainNo: result[i].DailyTrainInfo.TrainNo,
                     trainType: result[i].DailyTrainInfo.TrainTypeName.Zh_tw,
-                    DepartureTime: result[i].OriginStopTime.DepartureTime,
-                    ArrivalTime: result[i].DestinationStopTime.ArrivalTime,
-                    TripLine: result[i].DailyTrainInfo.TripLine
+                    departureTime: result[i].OriginStopTime.DepartureTime,
+                    arrivalTime: result[i].DestinationStopTime.ArrivalTime,
+                    tripLine: result[i].DailyTrainInfo.TripLine
                 })
             }
         }
@@ -204,7 +204,7 @@ function App() {
             </Form>
 
             {/* TrainList */}
-            {/* <List trains={result} /> */}
+            <List trains={scheduleResult} />
 
             <Footer />
         </Container>

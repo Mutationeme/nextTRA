@@ -1,0 +1,37 @@
+.textAlignCenter {
+    text-align: center;
+}
+
+.train {
+    margin: 1vh 0;
+}
+
+.trainNo {
+    padding: 0.5rem;
+    width: 25%;
+    background-color: #f2f2f2;
+}
+
+.trainDepart {
+    padding: 0.5rem;
+    width: 20%;
+    background-color: #f2f2f2;
+}
+
+.trainArrive {
+    padding: 0.5rem;
+    width: 20%;
+    background-color: #f2f2f2;
+}
+
+.trainTripLine {
+    padding: 0.5rem;
+    width: 10%;
+    background-color: #f2f2f2;
+}
+
+.trainTravelTime {
+    padding: 0.5rem;
+    width: 25%;
+    background-color: #f2f2f2;
+}
