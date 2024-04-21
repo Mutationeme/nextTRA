@@ -1,3 +1,9 @@
+/*
+** This node script query the stations from the TDX platform and arrange the station information into resultFilePath by the sequence of county list in countiesFilePath.
+** This node script would be auto executed by the build command in the package.json.
+** Default result path: src/stationInfo/stations.json
+** Default counties file path: src/stationInfo/counties.json
+*/
 const https = require("https");
 const fs = require("fs");
 const path = require("path");

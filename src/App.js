@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Container, Button, InputGroup } from 'react-bootstrap';
+import { Form, Container } from 'react-bootstrap';
+import { timeDifference } from "./time";
 
-import { getTrainByDate } from './request/index.js';
-import { timeFormat, timeDifference } from './time.js';
-import stations from './stationInfo/stations.json';
-
-import List from './components/List/list.js';
-import Footer from "./components/Footer/footer.js"
-import Select from './components/Select/select.js';
+import TrainList from './components/TrainList/TrainList.js';
+import Footer from "./components/Footer/Footer.js"
+import CountyStationSelect from './components/CountyStationSelect/CountyStationSelect.js';
 import TimeSelect from './components/TimeSelect/TimeSelect.js';
-import Buttons from "./components/Buttons/Buttons.js"
+import ActionButtons from "./components/ActionButtons/ActionButtons.js"
+
+// Include the bootstrap in html head to reduce the build size
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-    
+
     const [schedule, setSchedule] = useState({
         origin: {
             countyIdx: -1,
@@ -123,8 +123,7 @@ function App() {
 
         for (let i = 0; i < result.length; i++) {
             let trainTime = new Date(result[i].TrainDate + "T" + result[i].OriginStopTime.DepartureTime);
-            if(timeDifference(trainTime, option.time) >= 0)
-            {
+            if (timeDifference(trainTime, option.time) >= 0) {
                 newScheduleResult.trains.push({
                     trainNo: result[i].DailyTrainInfo.TrainNo,
                     trainType: result[i].DailyTrainInfo.TrainTypeName.Zh_tw,
@@ -137,33 +136,6 @@ function App() {
 
         setScheduleResult(newScheduleResult);
     }
-    //
-
-    // function handleSubmit() {
-    //     let arg = {
-    //         departure: departure,
-    //         arrival: arrival,
-    //         date: time
-    //     };
-    //     let trains = [];
-    //     getTrainByDate(arg).then((res) => {
-    //         res.forEach((train) => {
-    //             let trainTime = train.TrainDate + "T" + train.OriginStopTime.DepartureTime;
-    //             let timeLag = (new Date(trainTime)).getTime() - time.getTime();
-
-    //             if (timeLag >= 0) {
-    //                 trains.push({
-    //                     timeLag: timeLag,
-    //                     ...train
-    //                 });
-    //             }
-    //         })
-    //         trains.sort((a, b) => {
-    //             return a.timeLag - b.timeLag;
-    //         })
-    //         setResult(trains);
-    //     })
-    // }
 
     useEffect(() => {
         console.log(schedule);
@@ -173,8 +145,7 @@ function App() {
     return (
         <Container>
             <Form>
-                {/* CountyStationSelect */}
-                <Select
+                <CountyStationSelect
                     label={"From"}
                     countyIdx={schedule.origin.countyIdx}
                     station={schedule.origin.stationID}
@@ -182,7 +153,7 @@ function App() {
                     selectStation={selectOriginStation}
                 />
 
-                <Select
+                <CountyStationSelect
                     label={"To"}
                     countyIdx={schedule.destination.countyIdx}
                     station={schedule.destination.stationID}
@@ -195,16 +166,16 @@ function App() {
                     selectTime={selectTime}
                 />
 
-                {/* ActionButtons */}
-                <Buttons
+                <ActionButtons
                     scheduleOptions={schedule}
                     handleSwap={handleSwap}
                     handleSubmit={handleScheduleResult}
                 />
             </Form>
 
-            {/* TrainList */}
-            <List trains={scheduleResult} />
+            <TrainList
+                scheduleResult={scheduleResult}
+            />
 
             <Footer />
         </Container>

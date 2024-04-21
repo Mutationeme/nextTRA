@@ -1,7 +1,9 @@
 import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 
-import { getTrainByDate } from "../../request/index.js"
+import { getTrainByDate } from "../../request/index.js";
+
+import "./ActionButtons.css";
 
 /*
 ** props:
@@ -9,7 +11,7 @@ import { getTrainByDate } from "../../request/index.js"
 **      handleSwap
 **      handleSubmit
 */
-function Buttons(props) {
+function ActionButtons(props) {
 
     async function requestTrains() {
         // let resultJson = getTrainByDate({
@@ -25,7 +27,6 @@ function Buttons(props) {
             arrival: props.scheduleOptions.destination.stationID,
             date: props.scheduleOptions.time
         });
-        console.log(resultJson);
         props.handleSubmit(resultJson, props.scheduleOptions);
     }
 
@@ -37,19 +38,19 @@ function Buttons(props) {
                     variant="outline-info"
                     type="button"
                     size="lg"
-                    style={{ width: "100%" }}
+                    className="fullWidth"
                     onClick={props.handleSwap}
                 >
                     Swap
                 </Button>
             </Form.Group>
-            <Form.Group as={Col} >
+            <Form.Group as={Col}>
                 <Form.Label>&nbsp;</Form.Label>
                 <Button
                     variant="dark"
                     type="button"
                     size="lg"
-                    style={{ width: "100%" }}
+                    className="fullWidth"
                     onClick={requestTrains}
                 >
                     Submit
@@ -59,4 +60,4 @@ function Buttons(props) {
     );
 }
 
-export default Buttons;
+export default ActionButtons;

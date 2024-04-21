@@ -1,12 +1,15 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const webpackConfig = {
     mode: "development",
     entry: "./src/index.js",
     output: {
         path: path.resolve(__dirname, "build"),
-        filename: "bundle.js"
+        filename: "js/bundle.js"
     },
     module: {
         rules: [
@@ -21,7 +24,8 @@ const webpackConfig = {
             {
                 test: /\.(css)$/,
                 use: [
-                    "style-loader",
+                    // "style-loader",
+                    MiniCssExtractPlugin.loader,
                     "css-loader"
                 ]
             }
@@ -36,11 +40,17 @@ const webpackConfig = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./public/index.html",
-        })
+            // favicon: "./public/favicon.ico",
+        }),
+        new MiniCssExtractPlugin({
+            filename: "css/style.css"
+        }),
+        new CssMinimizerWebpackPlugin(),
+        new CleanWebpackPlugin(),
     ],
     devServer: {
         static: {
-            directory: path.join(__dirname, "dist")
+            directory: path.resolve(__dirname, "public"),
         },
         port: 3000,
         host: "127.0.0.1",

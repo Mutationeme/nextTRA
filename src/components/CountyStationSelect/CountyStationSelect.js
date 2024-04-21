@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
 import stations from '../../stationInfo/stations.json';
@@ -12,13 +12,14 @@ import stations from '../../stationInfo/stations.json';
 **     selectStation(string): function
 */
 
-function Select(props) {
-    
+function CountyStationSelect(props) {
+
     useEffect(() => {
         //console.log(props);
     }, [props, props.countyIdx]);
 
-    // station list under county is sorted ascented.
+    // Station list under county is sorted ascented.
+    // Binary search the target station information.
     function bsearchStation(array, target, start, end) {
         if (start > end) {
             return -1;
@@ -119,7 +120,7 @@ function Select(props) {
         <Row>
             <Form.Group as={Col}>
                 <Form.Label>{props.label}</Form.Label>
-                <Form.Control as="select"
+                <Form.Select
                     onChange={handleCountyChange}
                     value={getDefaultCounty()}
                     required
@@ -132,11 +133,11 @@ function Select(props) {
                             );
                         })
                     }
-                </Form.Control>
+                </Form.Select>
             </Form.Group>
             <Form.Group as={Col}>
                 <Form.Label>&nbsp;</Form.Label>
-                <Form.Control as="select"
+                <Form.Select
                     onChange={handleStationChange}
                     value={getDefaultStation()}
                     required
@@ -145,10 +146,10 @@ function Select(props) {
                     {
                         setStationListByCountyIdx(props.countyIdx)
                     }
-                </Form.Control>
+                </Form.Select>
             </Form.Group>
         </Row>
     );
 }
 
-export default Select;
+export default CountyStationSelect;

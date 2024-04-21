@@ -1,4 +1,4 @@
-import { timeFormat } from '../time.js';
+import { timeFormat } from '../time';
 
 const URL = "https://tdx.transportdata.tw/api/basic/v2/Rail/TRA/";
 
@@ -46,7 +46,6 @@ async function getTrainByDate(info) {
 
     try {
         let response = await fetch(URLi, reqOption);
-        //console.log(response);
         return response.json();
     }
     catch (error) {

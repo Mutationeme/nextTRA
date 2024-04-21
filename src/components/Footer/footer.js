@@ -1,10 +1,10 @@
 import React from "react";
-import "./footer.css";
+import "./Footer.css";
 
 function Footer(porps) {
     return (
         <div id="footer">
-            資料來源: 交通部PTX平臺/2020/v3
+            資料來源: Transport Data Exchange (TDX)
         </div>
     );
 }
