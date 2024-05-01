@@ -13,11 +13,6 @@ import stations from '../../stationInfo/stations.json';
 */
 
 function CountyStationSelect(props) {
-
-    useEffect(() => {
-        //console.log(props);
-    }, [props, props.countyIdx]);
-
     // Station list under county is sorted ascented.
     // Binary search the target station information.
     function bsearchStation(array, target, start, end) {
@@ -115,6 +110,14 @@ function CountyStationSelect(props) {
             props.selectStation(event.target.value);
         }
     }
+
+    // Development mode only
+    if (!__PRODUCTION__) {
+        useEffect(() => {
+            console.log(props);
+        }, [props]);
+    }
+    // End of development mode code
 
     return (
         <Row>

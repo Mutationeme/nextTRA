@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Container } from 'react-bootstrap';
 import { timeDifference } from "./time";
 
@@ -12,7 +12,6 @@ import ActionButtons from "./components/ActionButtons/ActionButtons.js"
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-
     const [schedule, setSchedule] = useState({
         origin: {
             countyIdx: -1,
@@ -137,10 +136,14 @@ function App() {
         setScheduleResult(newScheduleResult);
     }
 
-    useEffect(() => {
-        console.log(schedule);
-        console.log(scheduleResult);
-    }, [schedule, scheduleResult])
+    // Development mode only
+    if (!__PRODUCTION__ && false) {
+        React.useEffect(() => {
+            console.log(schedule);
+            console.log(scheduleResult);
+        }, [schedule, scheduleResult])
+    }
+    // End of development mode code
 
     return (
         <Container>

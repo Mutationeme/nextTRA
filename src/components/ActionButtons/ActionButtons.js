@@ -30,6 +30,14 @@ function ActionButtons(props) {
         props.handleSubmit(resultJson, props.scheduleOptions);
     }
 
+    // Development mode only
+    if (!__PRODUCTION__) {
+        React.useEffect(() => {
+            console.log(props);
+        }, [props])
+    }
+    // End of development mode code
+
     return (
         <Row>
             <Form.Group as={Col} xs="4">

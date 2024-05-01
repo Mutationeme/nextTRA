@@ -4,7 +4,7 @@ import "./Footer.css";
 function Footer(porps) {
     return (
         <div id="footer">
-            資料來源: Transport Data Exchange (TDX)
+            Source: Transport Data Exchange (TDX)
         </div>
     );
 }

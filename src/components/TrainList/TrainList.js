@@ -95,6 +95,14 @@ function TrainList(props) {
         }
     }
 
+    // Development mode
+    if (!__PRODUCTION__) {
+        React.useEffect(() => {
+            console.log(props);
+        }, [props]);
+    }
+    // End of development mode code
+
     return (
         <div>
             {
