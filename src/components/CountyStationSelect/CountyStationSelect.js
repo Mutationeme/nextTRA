@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
 import stations from '../../stationInfo/stations.json';
@@ -113,9 +113,7 @@ function CountyStationSelect(props) {
 
     // Development mode only
     if (!__PRODUCTION__) {
-        useEffect(() => {
-            console.log(props);
-        }, [props]);
+        //console.log(props);
     }
     // End of development mode code
 
@@ -155,4 +153,26 @@ function CountyStationSelect(props) {
     );
 }
 
-export default CountyStationSelect;
+function reRenderCompare(prevProps, nextProps) {
+    if (
+        prevProps.countyIdx != undefined &&
+        nextProps.countyIdx != undefined &&
+        prevProps.countyIdx === nextProps.countyIdx &&
+
+        prevProps.station != undefined &&
+        nextProps.station != undefined &&
+        prevProps.station === nextProps.station &&
+
+        prevProps.selectCounty === nextProps.selectCounty &&
+        prevProps.selectStation === nextProps.selectStation
+    ) {
+        // don't re-render
+        return true;
+    }
+    else {
+        // re-render
+        return false;
+    }
+}
+
+export default memo(CountyStationSelect, reRenderCompare);

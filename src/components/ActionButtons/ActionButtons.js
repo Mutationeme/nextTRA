@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 
 import { getTrainByDate } from "../../request/index.js";
@@ -13,6 +13,7 @@ import "./ActionButtons.css";
 */
 function ActionButtons(props) {
 
+    
     async function requestTrains() {
         // let resultJson = getTrainByDate({
         //     departure: props.scheduleOptions.origin.stationID,
@@ -32,9 +33,7 @@ function ActionButtons(props) {
 
     // Development mode only
     if (!__PRODUCTION__) {
-        React.useEffect(() => {
-            console.log(props);
-        }, [props])
+        console.log(props);
     }
     // End of development mode code
 
@@ -68,4 +67,15 @@ function ActionButtons(props) {
     );
 }
 
-export default ActionButtons;
+export default memo(ActionButtons, (prevProps, nextProps)=>{
+    if(prevProps.handleSwap === nextProps.handleSwap)
+    {
+        console.log("swap");
+    }
+
+    if(prevProps.handleSubmit === nextProps.handleSubmit)
+    {
+        console.log("submit");
+    }
+    return false;
+});

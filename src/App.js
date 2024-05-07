@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form, Container } from 'react-bootstrap';
 import { timeDifference } from "./time";
 
@@ -36,69 +36,78 @@ function App() {
         trains: []
     });
 
-    function selectOriginCounty(index) {
-        setSchedule({
-            origin: {
-                countyIdx: index,
-                stationID: ""
-            },
-            destination: schedule.destination,
-            time: schedule.time
+    const selectOriginCounty = useCallback((index) => {
+        setSchedule((prevState) => {
+            return {
+                origin: {
+                    countyIdx: index,
+                    stationID: ""
+                },
+                destination: prevState.destination,
+                time: prevState.time
+            };
         });
-    }
+    }, []);
 
-    function selectDestinationCounty(index) {
-        setSchedule({
-            origin: schedule.origin,
-            destination: {
-                countyIdx: index,
-                stationID: ""
-            },
-            time: schedule.time
+    const selectDestinationCounty = useCallback((index) => {
+        setSchedule((prevState) => {
+            return {
+                origin: prevState.origin,
+                destination: {
+                    countyIdx: index,
+                    stationID: ""
+                },
+                time: prevState.time
+            }
         });
-    }
+    }, []);
 
-    function selectOriginStation(id) {
-        setSchedule({
-            origin: {
-                countyIdx: schedule.origin.countyIdx,
-                stationID: id
-            },
-            destination: schedule.destination,
-            time: schedule.time
+    const selectOriginStation = useCallback((id) => {
+        setSchedule((prevState) => {
+            return {
+                origin: {
+                    countyIdx: prevState.origin.countyIdx,
+                    stationID: id
+                },
+                destination: prevState.destination,
+                time: prevState.time
+            };
         });
-    }
+    }, []);
 
-    function selectDestinationStation(id) {
-        setSchedule({
-            origin: schedule.origin,
-            destination: {
-                countyIdx: schedule.destination.countyIdx,
-                stationID: id
-            },
-            time: schedule.time
+    const selectDestinationStation = useCallback((id) => {
+        setSchedule((prevState) => {
+            return {
+                origin: prevState.origin,
+                destination: {
+                    countyIdx: prevState.destination.countyIdx,
+                    stationID: id
+                },
+                time: prevState.time
+            };
         });
-    }
+    }, []);
 
-    function selectTime(time) {
-        setSchedule({
-            origin: schedule.origin,
-            destination: schedule.destination,
-            time: time
+    const selectTime = useCallback((time) => {
+        setSchedule((prevState) => {
+            return {
+                origin: prevState.origin,
+                destination: prevState.destination,
+                time: time
+            };
         });
-    }
+    }, []);
 
-    function handleSwap() {
-        let origin = schedule.origin
-        let destination = schedule.destination;
-        let time = schedule.time;
-        setSchedule({
-            origin: destination,
-            destination: origin,
-            time: time
+    const handleSwap = useCallback(() => {
+        setSchedule((prevState) => {
+            return {
+                origin: prevState.destination,
+                destination: prevState.origin,
+                time: prevState.time
+            }
         });
-    }
-
+    }, []);
+    
     /*
     ** args:
     **  result: json 
@@ -137,11 +146,11 @@ function App() {
     }
 
     // Development mode only
-    if (!__PRODUCTION__ && false) {
+    if (!__PRODUCTION__ && true) {
         React.useEffect(() => {
             console.log(schedule);
-            console.log(scheduleResult);
-        }, [schedule, scheduleResult])
+            //console.log(scheduleResult);
+        }, [schedule/*, scheduleResult*/])
     }
     // End of development mode code
 

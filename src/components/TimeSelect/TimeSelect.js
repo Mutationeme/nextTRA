@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo } from "react";
 import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
 import { timeFormat } from "../../time";
 
@@ -17,9 +17,7 @@ function TimeSelect(props) {
 
     // Development mode
     if (!__PRODUCTION__) {
-        React.useEffect(() => {
-            console.log(props);
-        }, [props]);
+        //console.log(props);
     }
     // End of development mode code
 
@@ -60,4 +58,4 @@ function TimeSelect(props) {
     );
 }
 
-export default TimeSelect;
+export default memo(TimeSelect);

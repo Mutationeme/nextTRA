@@ -41,7 +41,7 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new DefinePlugin({
-                __PRODUCTION__: argv.mode === "production" ? true: false,
+                __PRODUCTION__: ((argv != undefined) && (argv.mode === "production")) ? true: false,
             }),
             new HtmlWebpackPlugin({
                 template: "./public/index.html",
