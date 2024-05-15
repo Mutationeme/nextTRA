@@ -113,7 +113,7 @@ function CountyStationSelect(props) {
 
     // Development mode only
     if (!__PRODUCTION__) {
-        //console.log(props);
+        console.log(props);
     }
     // End of development mode code
 
@@ -175,4 +175,4 @@ function reRenderCompare(prevProps, nextProps) {
     }
 }
 
-export default memo(CountyStationSelect, reRenderCompare);
+export default memo(CountyStationSelect/*, reRenderCompare*/);

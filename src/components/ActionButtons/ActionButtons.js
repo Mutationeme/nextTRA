@@ -58,7 +58,7 @@ function ActionButtons(props) {
                     type="button"
                     size="lg"
                     className="fullWidth"
-                    onClick={requestTrains}
+                    onClick={requestTrains /*props.handleSubmit*/}
                 >
                     Submit
                 </Button>
@@ -67,15 +67,4 @@ function ActionButtons(props) {
     );
 }
 
-export default memo(ActionButtons, (prevProps, nextProps)=>{
-    if(prevProps.handleSwap === nextProps.handleSwap)
-    {
-        console.log("swap");
-    }
-
-    if(prevProps.handleSubmit === nextProps.handleSubmit)
-    {
-        console.log("submit");
-    }
-    return false;
-});
+export default memo(ActionButtons);
