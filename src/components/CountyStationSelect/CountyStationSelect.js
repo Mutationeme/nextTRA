@@ -81,6 +81,32 @@ function CountyStationSelect(props) {
         }
     }
 
+    function setStationSelectRequiredAndDisabled() {
+        if (props.countyIdx >= 0) {
+            return (
+                <Form.Select
+                    onChange={handleStationChange}
+                    value={getDefaultStation()}
+                    required
+                >
+                    <option value=""></option>
+                    {
+                        setStationListByCountyIdx(props.countyIdx)
+                    }
+                </Form.Select>
+            );
+        }
+        else {
+            return (
+                <Form.Select
+                    disabled
+                >
+                </Form.Select>
+            );
+
+        }
+    }
+
     function handleCountyChange(event) {
         if (event.target != undefined &&
             event.target.selectedIndex != undefined &&
@@ -138,7 +164,10 @@ function CountyStationSelect(props) {
             </Form.Group>
             <Form.Group as={Col}>
                 <Form.Label>&nbsp;</Form.Label>
-                <Form.Select
+                {
+                    setStationSelectRequiredAndDisabled()
+                }
+                {/* <Form.Select
                     onChange={handleStationChange}
                     value={getDefaultStation()}
                     required
@@ -147,32 +176,10 @@ function CountyStationSelect(props) {
                     {
                         setStationListByCountyIdx(props.countyIdx)
                     }
-                </Form.Select>
+                </Form.Select> */}
             </Form.Group>
         </Row>
     );
 }
 
-function reRenderCompare(prevProps, nextProps) {
-    if (
-        prevProps.countyIdx != undefined &&
-        nextProps.countyIdx != undefined &&
-        prevProps.countyIdx === nextProps.countyIdx &&
-
-        prevProps.station != undefined &&
-        nextProps.station != undefined &&
-        prevProps.station === nextProps.station &&
-
-        prevProps.selectCounty === nextProps.selectCounty &&
-        prevProps.selectStation === nextProps.selectStation
-    ) {
-        // don't re-render
-        return true;
-    }
-    else {
-        // re-render
-        return false;
-    }
-}
-
-export default memo(CountyStationSelect/*, reRenderCompare*/);
+export default memo(CountyStationSelect);

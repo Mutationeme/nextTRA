@@ -11,10 +11,6 @@ import ActionButtons from "./components/ActionButtons/ActionButtons.js"
 // Include the bootstrap in html head to reduce the build size
 // import "bootstrap/dist/css/bootstrap.min.css";
 
-//
-import { getTrainByDate } from "./request/index.js";
-//
-
 function App() {
     const [schedule, setSchedule] = useState({
         origin: {
@@ -111,47 +107,6 @@ function App() {
             }
         });
     }, []);
-
-
-    // const handleScheduleResult = useCallback(async () => {
-    //     let result = await getTrainByDate({
-    //         departure: schedule.origin.stationID,
-    //         arrival: schedule.destination.stationID,
-    //         date: schedule.time
-    //     });
-
-    //     if (result.length === 0) {
-    //         return;
-    //     }
-
-    //     let nextScheduleResult = {
-    //         origin: {
-    //             stationID: result[0].OriginStopTime.StationID,
-    //             stationName: result[0].OriginStopTime.StationName.Zh_tw
-    //         },
-    //         destination: {
-    //             stationID: result[0].DestinationStopTime.StationID,
-    //             stationName: result[0].DestinationStopTime.StationName.Zh_tw
-    //         },
-    //         trains: []
-    //     };
-
-    //     for (let i = 0; i < result.length; i++) {
-    //         let trainTime = new Date(result[i].TrainDate + "T" + result[i].OriginStopTime.DepartureTime);
-    //         if (timeDifference(trainTime, schedule.time) >= 0) {
-    //             nextScheduleResult.trains.push({
-    //                 trainNo: result[i].DailyTrainInfo.TrainNo,
-    //                 trainType: result[i].DailyTrainInfo.TrainTypeName.Zh_tw,
-    //                 departureTime: result[i].OriginStopTime.DepartureTime,
-    //                 arrivalTime: result[i].DestinationStopTime.ArrivalTime,
-    //                 tripLine: result[i].DailyTrainInfo.TripLine
-    //             })
-    //         }
-    //     }
-
-    //     setScheduleResult(nextScheduleResult);
-    // }, [schedule]);
-
 
     /*
     ** args:

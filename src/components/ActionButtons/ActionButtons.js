@@ -12,7 +12,6 @@ import "./ActionButtons.css";
 **      handleSubmit
 */
 function ActionButtons(props) {
-
     
     async function requestTrains() {
         // let resultJson = getTrainByDate({
@@ -58,7 +57,7 @@ function ActionButtons(props) {
                     type="button"
                     size="lg"
                     className="fullWidth"
-                    onClick={requestTrains /*props.handleSubmit*/}
+                    onClick={requestTrains}
                 >
                     Submit
                 </Button>

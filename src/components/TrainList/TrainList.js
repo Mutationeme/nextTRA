@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { ListGroup } from "react-bootstrap";
 import { getTravelTime } from "../../time";
 
@@ -36,6 +36,60 @@ function TrainList(props) {
         }
     }
 
+    /*
+    ** trainTypeString format:
+    **    e.g. 自強(3000)(EMU3000 型電車)
+    */
+    function filterTrainType(trainTypeString) {
+        let regExp = /([\u4E00-\u9FFF]+)|(\(([^\(\)]+)\))/g;
+        let matches = [...trainTypeString.matchAll(regExp)];
+        let type = "";
+
+        console.log(matches);
+
+        /*
+        ** e.g. 自強(3000)(EMU3000 型電車)
+        ** match: [
+        **  ["自強", "自強", undefined, undefined],
+        **  ["(3000)", undefined, "(3000)", "3000"],
+        **  ["(EMU3000 型電車)", undefined, "(EMU3000 型電車)", "EMU3000 型電車"]
+        ** ]
+        */
+
+        if (
+            matches.length > 0 &&
+            matches[0].length > 0 &&
+            matches[0][0] != undefined
+        ) {
+            type = matches[0][0];
+        }
+        else {
+            return trainTypeString;
+        }
+
+        for (let i = 1; i < matches.length; i++) {
+            if (
+                matches[i][2] != undefined &&
+                matches[i][3] != undefined
+            ) {
+                switch (matches[i][3]) {
+                    case "3000":
+                    case "專開列車":
+                    case "郵輪式列車":
+                    case "商務專開列車":{
+                        type = type + matches[i][2];
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return type;
+    }
+
     function showSingleTrain(train) {
         if (train != undefined &&
             train.trainNo != undefined &&
@@ -50,6 +104,8 @@ function TrainList(props) {
             props.scheduleResult.destination != undefined &&
             props.scheduleResult.destination.stationName != undefined
         ) {
+
+            train.trainType = filterTrainType(train.trainType);
             return (
                 <ListGroup horizontal key={train.trainNo} className="train">
                     <ListGroup.Item className="trainNo">
@@ -97,9 +153,7 @@ function TrainList(props) {
 
     // Development mode
     if (!__PRODUCTION__) {
-        // React.useEffect(() => {
-        //     console.log(props);
-        // }, [props]);
+        console.log(props);
     }
     // End of development mode code
 
@@ -112,4 +166,4 @@ function TrainList(props) {
     );
 }
 
-export default TrainList;
+export default memo(TrainList);
