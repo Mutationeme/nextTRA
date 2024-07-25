@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 
-import { getTrainByDate } from "../../request/index.js";
+import { getTrainByDate } from "../../../request/index.js";
 
 import "./ActionButtons.css";
 

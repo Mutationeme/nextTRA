@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { ListGroup } from "react-bootstrap";
-import { getTravelTime } from "../../time";
+import { getTravelTime } from "../../../time";
 
 import "./TrainList.css";
 

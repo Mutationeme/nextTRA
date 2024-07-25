@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
-import { timeFormat } from "../../time";
+import { timeFormat } from "../../../time";
 
 /*
 ** props:

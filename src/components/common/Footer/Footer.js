@@ -4,7 +4,7 @@ import "./Footer.css";
 function Footer(porps) {
     return (
         <div id="footer">
-            Source: Transport Data Exchange (TDX)
+            Data Source: Transport Data Exchange (TDX)
         </div>
     );
 }

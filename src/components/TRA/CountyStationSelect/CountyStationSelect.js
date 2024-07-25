@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
-import stations from '../../stationInfo/stations.json';
+import stations from '../../../stationInfo/stations.json';
 
 /*
 ** props:
