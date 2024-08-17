@@ -1,25 +1,23 @@
-import React, { useCallback, useState } from 'react';
-import { Form, Container } from 'react-bootstrap';
+import React, { useState, useCallback } from "react";
+import { Container, Form } from "react-bootstrap";
+import { RAILTYPE_E } from "../../helpers/type/railType.js";
 import { timeDifference } from "../../helpers/time/index.js";
-import { RAILTYPE_E } from '../../helpers/type/railType.js';
 
 // Components
-import TrainList from '../common/TrainList/TrainList.js';
-import CountyStationSelect from './CountyStationSelect/CountyStationSelect.js';
-import TimeSelect from '../common/TimeSelect/TimeSelect.js';
+import StationSelect from "./StationSelect/StationSelect.js";
+import TimeSelect from "../common/TimeSelect/TimeSelect.js";
 import ActionButtons from "../common/ActionButtons/ActionButtons.js";
+import TrainList from "../common/TrainList/TrainList.js";
 
-// Language: zh_tw
+//Language: zh_tw
 import textLang from "../../helpers/languages/zh_tw.json";
 
-function TraTab() {
+function ThsrTab() {
     const [schedule, setSchedule] = useState({
         origin: {
-            countyIdx: -1,
             stationID: ""
         },
         destination: {
-            countyIdx: -1,
             stationID: ""
         },
         time: new Date()
@@ -37,37 +35,10 @@ function TraTab() {
         trains: []
     });
 
-    const selectOriginCounty = useCallback((index) => {
-        setSchedule((prevState) => {
-            return {
-                origin: {
-                    countyIdx: index,
-                    stationID: ""
-                },
-                destination: prevState.destination,
-                time: prevState.time
-            };
-        });
-    }, []);
-
-    const selectDestinationCounty = useCallback((index) => {
-        setSchedule((prevState) => {
-            return {
-                origin: prevState.origin,
-                destination: {
-                    countyIdx: index,
-                    stationID: ""
-                },
-                time: prevState.time
-            }
-        });
-    }, []);
-
     const selectOriginStation = useCallback((id) => {
         setSchedule((prevState) => {
             return {
                 origin: {
-                    countyIdx: prevState.origin.countyIdx,
                     stationID: id
                 },
                 destination: prevState.destination,
@@ -81,7 +52,6 @@ function TraTab() {
             return {
                 origin: prevState.origin,
                 destination: {
-                    countyIdx: prevState.destination.countyIdx,
                     stationID: id
                 },
                 time: prevState.time
@@ -109,25 +79,16 @@ function TraTab() {
         });
     }, []);
 
-    /*
-    ** args:
-    **  result: json 
-    */
     const handleScheduleResult = useCallback((result, option) => {
-        if (result === undefined ||
-            result.length === undefined ||
-            result.length === 0
-        ) {
+        if (result.length === 0) {
             return;
         }
 
         let newScheduleResult = {
             origin: {
-                stationID: result[0].OriginStopTime.StationID,
                 stationName: result[0].OriginStopTime.StationName.Zh_tw
             },
             destination: {
-                stationID: result[0].DestinationStopTime.StationID,
                 stationName: result[0].DestinationStopTime.StationName.Zh_tw
             },
             trains: []
@@ -138,10 +99,8 @@ function TraTab() {
             if (timeDifference(trainTime, option.time) >= 0) {
                 newScheduleResult.trains.push({
                     trainNo: result[i].DailyTrainInfo.TrainNo,
-                    trainType: result[i].DailyTrainInfo.TrainTypeName.Zh_tw,
                     departureTime: result[i].OriginStopTime.DepartureTime,
                     arrivalTime: result[i].DestinationStopTime.ArrivalTime,
-                    tripLine: result[i].DailyTrainInfo.TripLine
                 })
             }
         }
@@ -161,19 +120,15 @@ function TraTab() {
     return (
         <Container>
             <Form>
-                <CountyStationSelect
+                <StationSelect
                     label={textLang.From}
-                    countyIdx={schedule.origin.countyIdx}
                     station={schedule.origin.stationID}
-                    selectCounty={selectOriginCounty}
                     selectStation={selectOriginStation}
                 />
 
-                <CountyStationSelect
+                <StationSelect
                     label={textLang.To}
-                    countyIdx={schedule.destination.countyIdx}
                     station={schedule.destination.stationID}
-                    selectCounty={selectDestinationCounty}
                     selectStation={selectDestinationStation}
                 />
 
@@ -186,16 +141,16 @@ function TraTab() {
                     scheduleOptions={schedule}
                     handleSwap={handleSwap}
                     handleSubmit={handleScheduleResult}
-                    railType={RAILTYPE_E.TRA}
+                    railType={RAILTYPE_E.THSR}
                 />
             </Form>
 
             <TrainList
                 scheduleResult={scheduleResult}
-                railType={RAILTYPE_E.TRA}
+                railType={RAILTYPE_E.THSR}
             />
         </Container>
     );
 }
 
-export default TraTab;
+export default ThsrTab;

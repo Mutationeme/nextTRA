@@ -1,18 +1,27 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 
-import { getTrainByDate } from "../../../request/index.js";
+import { getTrainByDate as getTRATrainByDate } from "../../../request/traReq.js";
+import { getTrainByDate as getTHSRTrainByDate } from "../../../request/thsrReq.js";
+import { RAILTYPE_E } from "../../../helpers/type/railType.js";
 
 import "./ActionButtons.css";
+// Bootstrap icons
+/*!
+ * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2024 The Bootstrap Authors
+ * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+ */
+import { BsArrowRepeat, BsSearch } from "react-icons/bs";
 
 /*
 ** props:
 **      scheduleOptions
 **      handleSwap
 **      handleSubmit
+**      railType
 */
 function ActionButtons(props) {
-    
     async function requestTrains() {
         // let resultJson = getTrainByDate({
         //     departure: props.scheduleOptions.origin.stationID,
@@ -22,11 +31,24 @@ function ActionButtons(props) {
         //     props.handleSubmit(res, props.scheduleOptions);
         // })
 
-        let resultJson = await getTrainByDate({
+        if (props === undefined || props.railType === undefined) {
+            return;
+        }
+
+        let reqOptions = {
             departure: props.scheduleOptions.origin.stationID,
             arrival: props.scheduleOptions.destination.stationID,
             date: props.scheduleOptions.time
-        });
+        };
+        let resultJson;
+
+        if (props.railType === RAILTYPE_E.TRA) {
+            resultJson = await getTRATrainByDate(reqOptions);
+        }
+        else if (props.railType === RAILTYPE_E.THSR) {
+            resultJson = await getTHSRTrainByDate(reqOptions);
+        }
+
         props.handleSubmit(resultJson, props.scheduleOptions);
     }
 
@@ -41,13 +63,13 @@ function ActionButtons(props) {
             <Form.Group as={Col} xs="4">
                 <Form.Label>&nbsp;</Form.Label>
                 <Button
-                    variant="outline-info"
+                    variant="light"
                     type="button"
                     size="lg"
                     className="fullWidth"
                     onClick={props.handleSwap}
                 >
-                    Swap
+                    <BsArrowRepeat />
                 </Button>
             </Form.Group>
             <Form.Group as={Col}>
@@ -59,7 +81,7 @@ function ActionButtons(props) {
                     className="fullWidth"
                     onClick={requestTrains}
                 >
-                    Submit
+                    <BsSearch />
                 </Button>
             </Form.Group>
         </Row>

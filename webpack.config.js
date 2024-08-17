@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
+//const LicensePlugin = require('webpack-license-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 
@@ -52,6 +53,8 @@ module.exports = (env, argv) => {
             }),
             new CssMinimizerWebpackPlugin(),
             new CleanWebpackPlugin(),
+
+            //new LicensePlugin(),
         ],
         devServer: {
             static: {

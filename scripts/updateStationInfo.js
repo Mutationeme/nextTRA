@@ -1,17 +1,24 @@
 /*
 ** This node script query the stations from the TDX platform and arrange the station information into resultFilePath by the sequence of county list in countiesFilePath.
 ** This node script would be auto executed by the build command in the package.json.
-** Default result path: src/stationInfo/stations.json
-** Default counties file path: src/stationInfo/counties.json
+** TRA:
+**   Default result path: src/helpers/stationInfo/TRA/stations.json
+**   Default counties file path: src/helpers/stationInfo/THSR/counties.json
+** THSR:
+**   Default result path: src/helpers/stationInfo/THSR/stations.json
 */
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-const resultFilePath = path.join(__dirname, "..", "src", "stationInfo", "stations.json");
-const countiesFilePath = path.join(__dirname, "..", "src", "stationInfo", "counties.json");
+// TRA
+const resultFilePath = path.join(__dirname, "..", "src", "helpers", "stationInfo", "TRA", "stations.json");
+const countiesFilePath = path.join(__dirname, "..", "src", "helpers", "stationInfo", "TRA", "counties.json");
 const stationListUrl = "https://tdx.transportdata.tw/api/basic/v3/Rail/TRA/Station?%24format=JSON";
 
+// THSR
+const thsrResultFilePath = path.join(__dirname, "..", "src", "helpers", "stationInfo", "THSR", "stations.json");
+const thsrStationListUrl = "https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/Station?%24format=JSON";
 
 /* Example:
 ** curl 'https://tdx.transportdata.tw/api/basic/v3/Rail/TRA/Network?%24top=30&%24format=JSON' \
@@ -57,9 +64,10 @@ function query(url) {
 }
 
 async function main() {
+    // Query TRA StationInfo
     // first two traditional chinese character after digits (postal code) 
     const regex = /\d([\u4e00-\u9fff]{2})/;
-    const result = [];
+    let result = [];
 
     try {
         let stationList = await query(stationListUrl);
@@ -107,6 +115,31 @@ async function main() {
     }
     catch (error) {
         console.error("Error: ", error.message);
+    }
+
+    // Query THSR StationInfo
+    result = [];
+    try {
+        let thsrStationList = await query(thsrStationListUrl);
+        thsrStationList = JSON.parse(thsrStationList);
+
+        for (let i = 0; i < thsrStationList.length; i++) {
+            let station = thsrStationList[i];
+
+            result.push({
+                "StationUID": station.StationUID,
+                "StationID": station.StationID,
+                "StationName": station.StationName
+            });
+        }
+
+        //output result to file
+        //console.log(result);
+        fs.writeFileSync(thsrResultFilePath, JSON.stringify(result));
+
+    }
+    catch (error) {
+        console.error(error);
     }
 }
 

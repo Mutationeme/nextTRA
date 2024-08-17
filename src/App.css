@@ -1,0 +1,17 @@
+#absRoot {
+    padding: 5vh 10% 0 10%;
+}
+
+.nav-tabs {
+    border-bottom: 0;
+}
+
+.nav-link {
+    color: black;
+}
+
+.tab-content {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0 6px 6px 6px;
+}

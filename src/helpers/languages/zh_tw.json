@@ -1,0 +1,10 @@
+{
+    "TRA": "臺鐵",
+    "THSR": "高鐵",
+    "From": "出發地",
+    "To": "目的地",
+    "Date": "日期時間",
+    "Now": "現在",
+    "Source_text": "資料來源",
+    "Source_platform": "TDX運輸資料流通服務"
+}

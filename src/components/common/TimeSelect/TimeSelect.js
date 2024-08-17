@@ -1,6 +1,9 @@
 import React, { memo } from "react";
 import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
-import { timeFormat } from "../../../time";
+import { timeFormat } from "../../../helpers/time";
+
+// Language: zh_tw
+import textLang from "../../../helpers/languages/zh_tw.json";
 
 /*
 ** props:
@@ -24,7 +27,7 @@ function TimeSelect(props) {
     return (
         <Row>
             <Form.Group as={Col}>
-                <Form.Label>Date</Form.Label>
+                <Form.Label>{textLang.Date}</Form.Label>
                 <InputGroup>
                     <Form.Control
                         type="datetime-local"
@@ -50,7 +53,7 @@ function TimeSelect(props) {
                             () => { props.selectTime(new Date()) }
                         }
                     >
-                        Now
+                        {textLang.Now}
                     </Button>
                 </InputGroup>
             </Form.Group>

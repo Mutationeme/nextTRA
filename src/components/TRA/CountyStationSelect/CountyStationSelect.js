@@ -1,7 +1,9 @@
 import React, { memo } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
-import stations from '../../../stationInfo/stations.json';
+import stations from "../../../helpers/stationInfo/TRA/stations.json";
+
+import "./CountyStationSelect.css";
 
 /*
 ** props:

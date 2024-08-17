@@ -1,26 +1,6 @@
-import { timeFormat } from '../time';
+import { timeFormat } from '../helpers/time';
 
-const URL = "https://tdx.transportdata.tw/api/basic/v2/Rail/TRA/";
-
-const getStations = async () => {
-    let reqOption = {
-        method: "GET"
-    };
-    let URLi = URL + "Station?$format=JSON";
-
-    try {
-        let response = await fetch(URLi, reqOption);
-        if (!response.ok) {
-            throw Error(response.status);
-        }
-        else {
-            return response.json();
-        }
-    }
-    catch (err) {
-        console.error("error: " + err);
-    }
-}
+const URL = "https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/";
 
 /*
 ** Query the TDX by train innformations and get the train schedule of the target date.
@@ -31,7 +11,7 @@ const getStations = async () => {
 **      date: "Date"
 ** command:
 **  curl -X 'GET' \
-**  'https://tdx.transportdata.tw/api/basic/v2/Rail/TRA/DailyTimetable/OD/0900/to/0910/2024-02-11?%24format=JSON' \
+**  'https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/DailyTimetable/OD/1000/to/1040/2024-07-28?%24format=JSON' \
 **  -H 'accept: application/json'
 */
 async function getTrainByDate(info) {
@@ -49,8 +29,11 @@ async function getTrainByDate(info) {
         return response.json();
     }
     catch (error) {
-        //console.error(error);
+        if(!__PRODUCTION__)
+        {
+            console.error(error);
+        }
     }
 }
 
-export { getTrainByDate, getStations };
+export { getTrainByDate };
