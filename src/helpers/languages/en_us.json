@@ -6,5 +6,9 @@
     "Date": "Date",
     "Now": "Now",
     "Source_text": "Source",
-    "Source_platform": "Transport Data Exchange (TDX)"
+    "Source_platform": "Transport Data Exchange (TDX)",
+    "Hour": "hr",
+    "Minute": "min",
+    "Coast": "Coast",
+    "Mountain": "Mountain"
 }

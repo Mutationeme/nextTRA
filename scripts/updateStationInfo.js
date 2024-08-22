@@ -44,26 +44,33 @@ function query(url) {
         let req = https.request(options, (res) => {
             let data = "";
 
-            if (res.statusCode != 200) {
-                console.error("Query url:" + url + ", Status Code: " + res.statusCode.toString());
-            }
-
             res.on("data", (chunk) => {
                 data += chunk;
             });
             res.on("end", () => {
-                resolve(data);
-            })
+                if (res.statusCode == 200) {
+                    try {
+                        let dataJson = JSON.parse(data);
+                        resolve(dataJson);
+                    }
+                    catch (error) {
+                        reject(new Error("Error parsing JSON: " + error.message));
+                    }
+                }
+                else {
+                    reject(new Error("HTTP error! status:" + res.statusCode));
+                }
+            });
         });
         req.on("error", (error) => {
-            reject(error);
+            reject(new Error('Request error: ' + error.message));
         });
 
         req.end();
     })
 }
 
-async function main() {
+async function queryTRA() {
     // Query TRA StationInfo
     // first two traditional chinese character after digits (postal code) 
     const regex = /\d([\u4e00-\u9fff]{2})/;
@@ -71,7 +78,6 @@ async function main() {
 
     try {
         let stationList = await query(stationListUrl);
-        stationList = JSON.parse(stationList);
         let countyList = JSON.parse(fs.readFileSync(countiesFilePath, "utf-8"));
 
         for (let i = 0; i < countyList.length; i++) {
@@ -112,16 +118,18 @@ async function main() {
         //output result to file
         //console.log(result);
         fs.writeFileSync(resultFilePath, JSON.stringify(result));
+        console.log("Update TRA stations information.");
     }
     catch (error) {
         console.error("Error: ", error.message);
     }
+}
 
+async function queryTHSR() {
     // Query THSR StationInfo
-    result = [];
+    let result = [];
     try {
         let thsrStationList = await query(thsrStationListUrl);
-        thsrStationList = JSON.parse(thsrStationList);
 
         for (let i = 0; i < thsrStationList.length; i++) {
             let station = thsrStationList[i];
@@ -136,11 +144,15 @@ async function main() {
         //output result to file
         //console.log(result);
         fs.writeFileSync(thsrResultFilePath, JSON.stringify(result));
-
+        console.log("Update THSR stations information.");
     }
     catch (error) {
-        console.error(error);
+        console.error("Error: " + error);
     }
 }
 
-main();
+
+(function main() {
+    queryTRA();
+    queryTHSR();
+})()

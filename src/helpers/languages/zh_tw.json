@@ -6,5 +6,9 @@
     "Date": "日期時間",
     "Now": "現在",
     "Source_text": "資料來源",
-    "Source_platform": "TDX運輸資料流通服務"
+    "Source_platform": "TDX運輸資料流通服務",
+    "Hour": "時",
+    "Minute": "分",
+    "Coast": "海",
+    "Mountain": "山"
 }

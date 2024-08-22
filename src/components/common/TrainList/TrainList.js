@@ -3,6 +3,8 @@ import { ListGroup } from "react-bootstrap";
 import { getTravelTime } from "../../../helpers/time/index.js";
 import { RAILTYPE_E } from "../../../helpers/type/railType.js";
 
+import textLang from "../../../helpers/languages/zh_tw.json";
+
 import "./TrainList.css";
 
 /*
@@ -15,12 +17,12 @@ function travelTimeToElement(departureTime, arrivalTime) {
         <div>
             <div className="textAlignCenter">
                 {
-                    travelTime[0].toString().padStart(2, "0") + "時"
+                    travelTime[0].toString().padStart(2, "0") + textLang.Hour
                 }
             </div>
             <div className="textAlignCenter">
                 {
-                    travelTime[1].toString().padStart(2, "0") + "分"
+                    travelTime[1].toString().padStart(2, "0") + textLang.Minute
                 }
             </div>
         </div>
@@ -33,10 +35,10 @@ function travelTimeToElement(departureTime, arrivalTime) {
 function tripLineToText(tripLine) {
     //console(tripLine);
     if (tripLine === 1) {
-        return "山";
+        return textLang.Mountain;
     }
     else if (tripLine === 2) {
-        return "海";
+        return textLang.Coast;
     }
     else {
         return " ";
@@ -159,7 +161,9 @@ function TrainList(props) {
             props.scheduleResult.origin.stationName === undefined ||
 
             props.scheduleResult.destination === undefined ||
-            props.scheduleResult.destination.stationName === undefined
+            props.scheduleResult.destination.stationName === undefined ||
+
+            props.railType === undefined
         ) {
             return;
         }
