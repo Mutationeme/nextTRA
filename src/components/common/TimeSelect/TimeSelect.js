@@ -20,7 +20,6 @@ function TimeSelect(props) {
 
     // Development mode
     if (!__PRODUCTION__) {
-        //console.log(props);
     }
     // End of development mode code
 

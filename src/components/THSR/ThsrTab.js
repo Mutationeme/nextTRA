@@ -80,28 +80,42 @@ function ThsrTab() {
     }, []);
 
     const handleScheduleResult = useCallback((result, option) => {
-        if (result.length === 0) {
-            return;
-        }
-
         let newScheduleResult = {
             origin: {
-                stationName: result[0].OriginStopTime.StationName.Zh_tw
+                stationID: -1,
+                stationName: ""
             },
             destination: {
-                stationName: result[0].DestinationStopTime.StationName.Zh_tw
+                stationID: -1,
+                stationName: ""
             },
             trains: []
         };
 
-        for (let i = 0; i < result.length; i++) {
-            let trainTime = new Date(result[i].TrainDate + "T" + result[i].OriginStopTime.DepartureTime);
-            if (timeDifference(trainTime, option.time) >= 0) {
-                newScheduleResult.trains.push({
-                    trainNo: result[i].DailyTrainInfo.TrainNo,
-                    departureTime: result[i].OriginStopTime.DepartureTime,
-                    arrivalTime: result[i].DestinationStopTime.ArrivalTime,
-                })
+        if (result !== undefined &&
+            result !== null &&
+            result.length !== undefined &&
+            result.length !== 0
+        ) {
+            newScheduleResult = {
+                origin: {
+                    stationName: result[0].OriginStopTime.StationName.Zh_tw
+                },
+                destination: {
+                    stationName: result[0].DestinationStopTime.StationName.Zh_tw
+                },
+                trains: []
+            };
+
+            for (let i = 0; i < result.length; i++) {
+                let trainTime = new Date(result[i].TrainDate + "T" + result[i].OriginStopTime.DepartureTime);
+                if (timeDifference(trainTime, option.time) >= 0) {
+                    newScheduleResult.trains.push({
+                        trainNo: result[i].DailyTrainInfo.TrainNo,
+                        departureTime: result[i].OriginStopTime.DepartureTime,
+                        arrivalTime: result[i].DestinationStopTime.ArrivalTime,
+                    })
+                }
             }
         }
 
@@ -109,11 +123,7 @@ function ThsrTab() {
     }, []);
 
     // Development mode only
-    if (!__PRODUCTION__ && true) {
-        React.useEffect(() => {
-            console.log(schedule);
-            //console.log(scheduleResult);
-        }, [schedule/*, scheduleResult*/])
+    if (!__PRODUCTION__) {
     }
     // End of development mode code
 

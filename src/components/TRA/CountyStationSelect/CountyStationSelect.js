@@ -141,7 +141,6 @@ function CountyStationSelect(props) {
 
     // Development mode only
     if (!__PRODUCTION__) {
-        console.log(props);
     }
     // End of development mode code
 

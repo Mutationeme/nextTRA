@@ -1,4 +1,5 @@
-import { timeFormat } from '../helpers/time';
+import { timeFormat } from "../helpers/time";
+import { ERRORTYPE_E } from "../helpers/type/errorType";
 
 const URL = "https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/";
 
@@ -26,13 +27,23 @@ async function getTrainByDate(info) {
 
     try {
         let response = await fetch(URLi, reqOption);
-        return response.json();
+        if (!response.ok) {
+            if (!__PRODUCTION__) {
+                console.error("HTTP error! Status:" + response.status);
+            }
+
+            throw Error(ERRORTYPE_E.FETCH_ERROR);
+        }
+        else {
+            return response.json();
+        }
     }
     catch (error) {
-        if(!__PRODUCTION__)
-        {
-            console.error(error);
+        if (!__PRODUCTION__) {
+            console.error("error: " + error);
         }
+
+        throw Error(ERRORTYPE_E.FETCH_ERROR);
     }
 }
 

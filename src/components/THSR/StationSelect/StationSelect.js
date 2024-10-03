@@ -58,7 +58,6 @@ function StationSelect(props) {
     }
 
     if (!__PRODUCTION__) {
-        console.log(props);
     }
 
     return (

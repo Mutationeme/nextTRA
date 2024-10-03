@@ -4,7 +4,10 @@ import React, { useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import TraTab from "./components/TRA/TraTab.js";
 import ThsrTab from "./components/THSR/ThsrTab.js";
+import { NotifyToast } from "./components/common/NotifyToast/NotifyToast.js";
 import Footer from "./components/common/Footer/Footer.js";
+
+import { StatusProvider } from "./context/statusContext.js";
 
 // Languages: zh_tw
 import textLang from "./helpers/languages/zh_tw.json";
@@ -68,38 +71,41 @@ function App() {
 
     return (
         <div id="absRoot">
-            <Tabs
-                activeKey={tabKey}
-                onSelect={(key) => {
-                    setTabKey(key);
-                }}
-            >
-                <Tab
-                    eventKey={0}
-                    title={
-                        <span>
-                            <IoIosTrain color="DodgerBlue" size="1.2rem" />
-                            &nbsp;{textLang.TRA}
-                        </span>
-                    }
+            <StatusProvider>
+                <Tabs
+                    activeKey={tabKey}
+                    onSelect={(key) => {
+                        setTabKey(key);
+                    }}
                 >
-                    <TraTab />
-                </Tab>
+                    <Tab
+                        eventKey={0}
+                        title={
+                            <span>
+                                <IoIosTrain color="DodgerBlue" size="1.2rem" />
+                                &nbsp;{textLang.TRA}
+                            </span>
+                        }
+                    >
+                        <TraTab />
+                    </Tab>
 
-                <Tab
-                    eventKey={1}
-                    title={
-                        <span>
-                            <TbTrain color="orange" size="1.2rem" />
-                            &nbsp;{textLang.THSR}
-                        </span>
-                    }
-                >
-                    <ThsrTab />
-                </Tab>
-            </Tabs>
-            <Footer />
-        </div >
+                    <Tab
+                        eventKey={1}
+                        title={
+                            <span>
+                                <TbTrain color="orange" size="1.2rem" />
+                                &nbsp;{textLang.THSR}
+                            </span>
+                        }
+                    >
+                        <ThsrTab />
+                    </Tab>
+                </Tabs>
+                <NotifyToast />
+                <Footer />
+            </StatusProvider>
+        </div>
     );
 }
 

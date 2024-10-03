@@ -1,18 +1,21 @@
 import React, { memo, useEffect, useState } from "react";
+import "./ActionButtons.css";
+
 import { Row, Col, Form, Button } from "react-bootstrap";
 
 import { getTrainByDate as getTRATrainByDate } from "../../../request/traReq.js";
 import { getTrainByDate as getTHSRTrainByDate } from "../../../request/thsrReq.js";
 import { RAILTYPE_E } from "../../../helpers/type/railType.js";
 
-import "./ActionButtons.css";
+import { notifyMessage, notifyError } from "../../common/NotifyToast/NotifyToast.js";
+
 // Bootstrap icons
 /*!
  * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
  * Copyright 2019-2024 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
  */
-import { BsArrowRepeat, BsSearch } from "react-icons/bs";
+import { BsArrowDownUp, BsSearch } from "react-icons/bs";
 
 /*
 ** props:
@@ -40,13 +43,19 @@ function ActionButtons(props) {
             arrival: props.scheduleOptions.destination.stationID,
             date: props.scheduleOptions.time
         };
-        let resultJson;
+        let resultJson = null;
 
-        if (props.railType === RAILTYPE_E.TRA) {
-            resultJson = await getTRATrainByDate(reqOptions);
+        try {
+            if (props.railType === RAILTYPE_E.TRA) {
+                resultJson = await getTRATrainByDate(reqOptions);
+            }
+            else if (props.railType === RAILTYPE_E.THSR) {
+                resultJson = await getTHSRTrainByDate(reqOptions);
+            }
         }
-        else if (props.railType === RAILTYPE_E.THSR) {
-            resultJson = await getTHSRTrainByDate(reqOptions);
+        catch (error) {
+            resultJson = null;
+            notifyError(error.toString());
         }
 
         props.handleSubmit(resultJson, props.scheduleOptions);
@@ -54,7 +63,6 @@ function ActionButtons(props) {
 
     // Development mode only
     if (!__PRODUCTION__) {
-        console.log(props);
     }
     // End of development mode code
 
@@ -69,7 +77,7 @@ function ActionButtons(props) {
                     className="fullWidth"
                     onClick={props.handleSwap}
                 >
-                    <BsArrowRepeat />
+                    <BsArrowDownUp />
                 </Button>
             </Form.Group>
             <Form.Group as={Col}>

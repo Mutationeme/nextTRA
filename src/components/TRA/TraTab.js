@@ -1,4 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
+
+// Language: zh_tw
+import textLang from "../../helpers/languages/zh_tw.json";
+
 import { Form, Container } from 'react-bootstrap';
 import { timeDifference } from "../../helpers/time/index.js";
 import { RAILTYPE_E } from '../../helpers/type/railType.js';
@@ -8,9 +12,6 @@ import TrainList from '../common/TrainList/TrainList.js';
 import CountyStationSelect from './CountyStationSelect/CountyStationSelect.js';
 import TimeSelect from '../common/TimeSelect/TimeSelect.js';
 import ActionButtons from "../common/ActionButtons/ActionButtons.js";
-
-// Language: zh_tw
-import textLang from "../../helpers/languages/zh_tw.json";
 
 function TraTab() {
     const [schedule, setSchedule] = useState({
@@ -114,35 +115,46 @@ function TraTab() {
     **  result: json 
     */
     const handleScheduleResult = useCallback((result, option) => {
-        if (result === undefined ||
-            result.length === undefined ||
-            result.length === 0
-        ) {
-            return;
-        }
-
         let newScheduleResult = {
             origin: {
-                stationID: result[0].OriginStopTime.StationID,
-                stationName: result[0].OriginStopTime.StationName.Zh_tw
+                stationID: -1,
+                stationName: ""
             },
             destination: {
-                stationID: result[0].DestinationStopTime.StationID,
-                stationName: result[0].DestinationStopTime.StationName.Zh_tw
+                stationID: -1,
+                stationName: ""
             },
             trains: []
-        };
+        }
 
-        for (let i = 0; i < result.length; i++) {
-            let trainTime = new Date(result[i].TrainDate + "T" + result[i].OriginStopTime.DepartureTime);
-            if (timeDifference(trainTime, option.time) >= 0) {
-                newScheduleResult.trains.push({
-                    trainNo: result[i].DailyTrainInfo.TrainNo,
-                    trainType: result[i].DailyTrainInfo.TrainTypeName.Zh_tw,
-                    departureTime: result[i].OriginStopTime.DepartureTime,
-                    arrivalTime: result[i].DestinationStopTime.ArrivalTime,
-                    tripLine: result[i].DailyTrainInfo.TripLine
-                })
+        if (result !== undefined &&
+            result !== null &&
+            result.length !== undefined &&
+            result.length !== 0
+        ) {
+            newScheduleResult = {
+                origin: {
+                    stationID: result[0].OriginStopTime.StationID,
+                    stationName: result[0].OriginStopTime.StationName.Zh_tw
+                },
+                destination: {
+                    stationID: result[0].DestinationStopTime.StationID,
+                    stationName: result[0].DestinationStopTime.StationName.Zh_tw
+                },
+                trains: []
+            };
+
+            for (let i = 0; i < result.length; i++) {
+                let trainTime = new Date(result[i].TrainDate + "T" + result[i].OriginStopTime.DepartureTime);
+                if (timeDifference(trainTime, option.time) >= 0) {
+                    newScheduleResult.trains.push({
+                        trainNo: result[i].DailyTrainInfo.TrainNo,
+                        trainType: result[i].DailyTrainInfo.TrainTypeName.Zh_tw,
+                        departureTime: result[i].OriginStopTime.DepartureTime,
+                        arrivalTime: result[i].DestinationStopTime.ArrivalTime,
+                        tripLine: result[i].DailyTrainInfo.TripLine
+                    })
+                }
             }
         }
 
@@ -150,11 +162,7 @@ function TraTab() {
     }, []);
 
     // Development mode only
-    if (!__PRODUCTION__ && true) {
-        React.useEffect(() => {
-            console.log(schedule);
-            //console.log(scheduleResult);
-        }, [schedule/*, scheduleResult*/])
+    if (!__PRODUCTION__) {
     }
     // End of development mode code
 
@@ -198,4 +206,4 @@ function TraTab() {
     );
 }
 
-export default TraTab;
+export default memo(TraTab);
