@@ -37,14 +37,13 @@ function getTravelTime(departureTime, arrivalTime) {
     let aTime = arrivalTime.split(':');
 
     // travel time in minutes
-    let travelTimeMinute = (parseInt(aTime[0], 10) * 60) + parseInt(aTime[1], 10) - (parseInt(dTime[0], 10) * 60) -  parseInt(dTime[1], 10);
+    let travelTimeMinute = (parseInt(aTime[0], 10) * 60) + parseInt(aTime[1], 10) - (parseInt(dTime[0], 10) * 60) - parseInt(dTime[1], 10);
     let travelTime = [0, 0];
 
 
     // if arrival Time cross a day, travelTimeMinutes would be a negative value.
     // Add 24 hr on it.
-    if (travelTimeMinute < 0)
-    {
+    if (travelTimeMinute < 0) {
         travelTimeMinute += 24 * 60;
     }
 
@@ -56,4 +55,10 @@ function getTravelTime(departureTime, arrivalTime) {
     return travelTime;
 }
 
-export { timeFormat, timeDifference, getTravelTime };
+function addDays(currentTime, days) {
+    let result = new Date(currentTime);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+export { timeFormat, timeDifference, getTravelTime, addDays };

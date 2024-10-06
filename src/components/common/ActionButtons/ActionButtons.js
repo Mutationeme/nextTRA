@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useContext } from "react";
 import "./ActionButtons.css";
 
 import { Row, Col, Form, Button } from "react-bootstrap";
@@ -7,7 +7,8 @@ import { getTrainByDate as getTRATrainByDate } from "../../../request/traReq.js"
 import { getTrainByDate as getTHSRTrainByDate } from "../../../request/thsrReq.js";
 import { RAILTYPE_E } from "../../../helpers/type/railType.js";
 
-import { notifyMessage, notifyError } from "../../common/NotifyToast/NotifyToast.js";
+import { notifyError } from "../../common/NotifyToast/NotifyToast.js";
+import { StatusContext } from "../../../context/statusContext.js";
 
 // Bootstrap icons
 /*!
@@ -16,49 +17,57 @@ import { notifyMessage, notifyError } from "../../common/NotifyToast/NotifyToast
  * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
  */
 import { BsArrowDownUp, BsSearch } from "react-icons/bs";
+import { ERRORTYPE_E } from "../../../helpers/type/errorType.js";
 
-/*
-** props:
-**      scheduleOptions
-**      handleSwap
-**      handleSubmit
-**      railType
-*/
-function ActionButtons(props) {
+function ActionButtons({
+    railType = RAILTYPE_E.NO_RAIL,
+    originStationID = "",
+    destinationStationID = "",
+    time = new Date(),
+    handleSwap,
+    handleSubmit
+} = {}) {
+    const isHandleSwapFunctionValid = (typeof handleSwap === "function");
+    const isHandleSubmitFunctionValid = (typeof handleSubmit === "function");
+    const isInputTimeValid = (time instanceof Date);
+
+    const { status, updateStatus } = useContext(StatusContext);
+
     async function requestTrains() {
-        // let resultJson = getTrainByDate({
-        //     departure: props.scheduleOptions.origin.stationID,
-        //     arrival: props.scheduleOptions.destination.stationID,
-        //     date: props.scheduleOptions.time
-        // }).then((res) => {
-        //     props.handleSubmit(res, props.scheduleOptions);
-        // })
-
-        if (props === undefined || props.railType === undefined) {
-            return;
-        }
-
         let reqOptions = {
-            departure: props.scheduleOptions.origin.stationID,
-            arrival: props.scheduleOptions.destination.stationID,
-            date: props.scheduleOptions.time
+            departure: originStationID,
+            arrival: destinationStationID,
+            date: time
         };
         let resultJson = null;
 
-        try {
-            if (props.railType === RAILTYPE_E.TRA) {
-                resultJson = await getTRATrainByDate(reqOptions);
-            }
-            else if (props.railType === RAILTYPE_E.THSR) {
-                resultJson = await getTHSRTrainByDate(reqOptions);
-            }
+        if (reqOptions.departure === "" ||
+            reqOptions.arrival === "" ||
+            !isInputTimeValid
+        ) {
+            notifyError(ERRORTYPE_E.REQ_OPTION_ERROR);
+            updateStatus(ERRORTYPE_E.REQ_OPTION_ERROR);
         }
-        catch (error) {
-            resultJson = null;
-            notifyError(error.toString());
-        }
+        else {
+            try {
+                if (railType === RAILTYPE_E.TRA) {
+                    resultJson = await getTRATrainByDate(reqOptions);
+                }
+                else if (railType === RAILTYPE_E.THSR) {
+                    resultJson = await getTHSRTrainByDate(reqOptions);
+                }
+                updateStatus(ERRORTYPE_E.NO_ERROR);
 
-        props.handleSubmit(resultJson, props.scheduleOptions);
+                if (resultJson !== null && isHandleSubmitFunctionValid) {
+                    handleSubmit(resultJson, { time: reqOptions.date });
+                }
+            }
+            catch (error) {
+                resultJson = null;
+                notifyError(error.message);
+                updateStatus(error.message);
+            }
+        }
     }
 
     // Development mode only
@@ -75,7 +84,13 @@ function ActionButtons(props) {
                     type="button"
                     size="lg"
                     className="fullWidth"
-                    onClick={props.handleSwap}
+                    onClick={
+                        () => {
+                            if (isHandleSwapFunctionValid) {
+                                handleSwap();
+                            }
+                        }
+                    }
                 >
                     <BsArrowDownUp />
                 </Button>

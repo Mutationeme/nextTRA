@@ -5,48 +5,41 @@ import stations from "../../../helpers/stationInfo/THSR/stations.json";
 
 import "./StationSelect.css";
 
-/*
-** station: stationID, string
-*/
-function isValidStationID(station) {
-    for (let i = 0; i < stations.length; i++) {
-        if (station === stations[i].StationID) {
-            return true;
+function StationSelect({ label = "", stationID = "", selectStation } = {}) {
+    const isSelectStationFunctionValid = (typeof selectStation === "function");
+    let isInputStationIdValid = false;
+    if (stationID !== "") {
+        for (let i = 0; i < stations.length; i++) {
+            if (stationID === stations[i].StationID) {
+                isInputStationIdValid = true;
+                break;
+            }
         }
     }
-    return false;
-}
-
-/*
-** props:
-**     label: string
-**     station: stationID, string
-**     selectStation(string): function
-*/
-function StationSelect(props) {
 
     function handleStationChange(event) {
-        if (event.target.value != undefined &&
-            event.target.value !== "" &&
+        if (isSelectStationFunctionValid &&
+            
+            event !== undefined &&
+            event.target !== undefined &&
+            event.target.value !== undefined &&
+            event.target.selectedIndex !== undefined &&
 
             event.target.selectedIndex > 0 &&
             event.target.selectedIndex <= stations.length &&
-            stations[event.target.selectedIndex - 1].StationID === event.target.value
+            stations[event.target.selectedIndex - 1].StationID === event.target.value 
         ) {
-            props.selectStation(event.target.value);
+            selectStation(event.target.value);
         }
     }
 
     function getDefaultStation() {
-        if (props != undefined &&
-            props.station != undefined &&
-            props.station !== "" &&
-            isValidStationID(props.station)
-        ) {
-            return props.station;
+        if (isInputStationIdValid) {
+            return stationID;
         }
-        return "";
-
+        else {
+            return "";
+        }
     }
 
     function setStationList() {
@@ -63,11 +56,10 @@ function StationSelect(props) {
     return (
         <Row>
             <Form.Group>
-                <Form.Label>{props.label}</Form.Label>
+                <Form.Label>{label}</Form.Label>
                 <Form.Select
                     onChange={handleStationChange}
                     value={getDefaultStation()}
-                    required
                 >
                     <option value=""></option>
                     {

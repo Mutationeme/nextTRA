@@ -2,38 +2,14 @@ import React, { memo } from "react";
 import { ListGroup } from "react-bootstrap";
 import { getTravelTime } from "../../../helpers/time/index.js";
 import { RAILTYPE_E } from "../../../helpers/type/railType.js";
-
 import textLang from "../../../helpers/languages/zh_tw.json";
-
 import "./TrainList.css";
-
-/*
-** Style the time in chinese as the format: XX時YY分.
-*/
-function travelTimeToElement(departureTime, arrivalTime) {
-    let travelTime = getTravelTime(departureTime, arrivalTime);
-
-    return (
-        <div>
-            <div className="textAlignCenter">
-                {
-                    travelTime[0].toString().padStart(2, "0") + textLang.Hour
-                }
-            </div>
-            <div className="textAlignCenter">
-                {
-                    travelTime[1].toString().padStart(2, "0") + textLang.Minute
-                }
-            </div>
-        </div>
-    );
-}
+import { ERRORTYPE_E } from "../../../helpers/type/errorType.js";
 
 /*
 ** Convert the tripLine number to readable information.
 */
 function tripLineToText(tripLine) {
-    //console(tripLine);
     if (tripLine === 1) {
         return textLang.Mountain;
     }
@@ -50,8 +26,8 @@ function tripLineToText(tripLine) {
 **    e.g. 自強(3000)(EMU3000 型電車)
 */
 function filterTrainType(trainTypeString) {
-    let regExp = /([\u4E00-\u9FFF]+)|(\(([^\(\)]+)\))/g;
-    let matches = [...trainTypeString.matchAll(regExp)];
+    const regExp = /([\u4E00-\u9FFF]+)|(\(([^\(\)]+)\))/g;
+    const matches = [...trainTypeString.matchAll(regExp)];
     let type = "";
 
     /*
@@ -97,18 +73,23 @@ function filterTrainType(trainTypeString) {
     return type;
 }
 
-/*
-** props:
-**    scheduleResult: object
-**    railType: RAILTYPE_E
-*/
-function TrainList(props) {
+function TrainList({
+    railType = RAILTYPE_E.NO_RAIL,
+    originStationName = "",
+    destinationStationName = "",
+    trains = []
+} = {}) {
+    const isOriginStationNameValid = ((typeof originStationName === "string") && (originStationName !== ""));
+    const isDestinationStationNameValid = ((typeof destinationStationName === "string") && (destinationStationName !== ""));
+    const isTrainsValid = (Array.isArray(trains) && (trains.length > 0));
+
     function showSingleTRATrain(train) {
         if (train === undefined ||
             train.trainNo === undefined ||
             train.departureTime === undefined ||
-            train.arrivalTime === undefined || (
-                props.railType === RAILTYPE_E.TRA &&
+            train.arrivalTime === undefined ||
+            (
+                railType === RAILTYPE_E.TRA &&
                 (train.trainType === undefined || train.tripLine === undefined)
             )
         ) {
@@ -120,7 +101,7 @@ function TrainList(props) {
         let railStyle = "railStyle";
         let travelTimeElement = travelTimeToElement(train.departureTime, train.arrivalTime);
 
-        if (props.railType === RAILTYPE_E.TRA) {
+        if (railType === RAILTYPE_E.TRA) {
             singleTrainType = filterTrainType(train.trainType);
             tripLineText = tripLineToText(train.tripLine);
         }
@@ -132,11 +113,11 @@ function TrainList(props) {
                     <div className="textAlignCenter">{train.trainNo}</div>
                 </ListGroup.Item>
                 <ListGroup.Item className={`trainDepart ${railStyle}`}>
-                    <div className="textAlignCenter">{props.scheduleResult.origin.stationName}</div>
+                    <div className="textAlignCenter">{originStationName}</div>
                     <div className="textAlignCenter">{train.departureTime}</div>
                 </ListGroup.Item>
                 <ListGroup.Item className={`trainArrive ${railStyle}`}>
-                    <div className="textAlignCenter">{props.scheduleResult.destination.stationName}</div>
+                    <div className="textAlignCenter">{destinationStationName}</div>
                     <div className="textAlignCenter">{train.arrivalTime}</div>
                 </ListGroup.Item>
                 <ListGroup.Item className={`trainTripLine ${railStyle}`}>
@@ -149,26 +130,32 @@ function TrainList(props) {
         );
     }
 
+    /*
+    ** Style the time in chinese as the format: XX時YY分.
+    */
+    function travelTimeToElement(departureTime, arrivalTime) {
+        let travelTime = getTravelTime(departureTime, arrivalTime);
+
+        return (
+            <div>
+                <div className="textAlignCenter">
+                    {
+                        travelTime[0].toString().padStart(2, "0") + textLang.Hour
+                    }
+                </div>
+                <div className="textAlignCenter">
+                    {
+                        travelTime[1].toString().padStart(2, "0") + textLang.Minute
+                    }
+                </div>
+            </div>
+        );
+    }
+
     function showScheduleResult() {
-        if (props === undefined ||
-            props.scheduleResult === undefined ||
-
-            props.scheduleResult.trains === undefined ||
-            Array.isArray(props.scheduleResult.trains) === false ||
-            props.scheduleResult.trains.length <= 0 ||
-
-            props.scheduleResult.origin === undefined ||
-            props.scheduleResult.origin.stationName === undefined ||
-
-            props.scheduleResult.destination === undefined ||
-            props.scheduleResult.destination.stationName === undefined ||
-
-            props.railType === undefined
-        ) {
-            return;
+        if (isOriginStationNameValid && isDestinationStationNameValid && isTrainsValid) {
+            return (trains.map(showSingleTRATrain));
         }
-
-        return (props.scheduleResult.trains.map(showSingleTRATrain));
     }
 
     // Development mode

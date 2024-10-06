@@ -9,7 +9,7 @@ import TimeSelect from "../common/TimeSelect/TimeSelect.js";
 import ActionButtons from "../common/ActionButtons/ActionButtons.js";
 import TrainList from "../common/TrainList/TrainList.js";
 
-//Language: zh_tw
+// Language
 import textLang from "../../helpers/languages/zh_tw.json";
 
 function ThsrTab() {
@@ -132,13 +132,13 @@ function ThsrTab() {
             <Form>
                 <StationSelect
                     label={textLang.From}
-                    station={schedule.origin.stationID}
+                    stationID={schedule.origin.stationID}
                     selectStation={selectOriginStation}
                 />
 
                 <StationSelect
                     label={textLang.To}
-                    station={schedule.destination.stationID}
+                    stationID={schedule.destination.stationID}
                     selectStation={selectDestinationStation}
                 />
 
@@ -148,16 +148,20 @@ function ThsrTab() {
                 />
 
                 <ActionButtons
-                    scheduleOptions={schedule}
+                    railType={RAILTYPE_E.THSR}
+                    originStationID={schedule.origin.stationID}
+                    destinationStationID={schedule.destination.stationID}
+                    time={schedule.time}
                     handleSwap={handleSwap}
                     handleSubmit={handleScheduleResult}
-                    railType={RAILTYPE_E.THSR}
                 />
             </Form>
 
             <TrainList
-                scheduleResult={scheduleResult}
                 railType={RAILTYPE_E.THSR}
+                originStationName={scheduleResult.origin.stationName}
+                destinationStationName={scheduleResult.destination.stationName}
+                trains={scheduleResult.trains}
             />
         </Container>
     );

@@ -10,5 +10,8 @@
     "Hour": "時",
     "Minute": "分",
     "Coast": "海",
-    "Mountain": "山"
+    "Mountain": "山",
+
+    "ReqOptErrMsg": "出發地/目的地 錯誤",
+    "FetchErrMsg": "網路錯誤"
 }

@@ -1,22 +1,12 @@
 import React, { memo } from "react";
 import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
-import { timeFormat } from "../../../helpers/time";
+import { timeFormat, addDays } from "../../../helpers/time";
 
 // Language: zh_tw
 import textLang from "../../../helpers/languages/zh_tw.json";
 
-/*
-** props:
-**        time: Date object
-**        selectTime: function
-*/
-function TimeSelect(props) {
-
-    function addDay(currentDate, days) {
-        let result = new Date(currentDate);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
+function TimeSelect({ time = new Date(), selectTime } = {}) {
+    const isSelectTimeFunctionValid = (typeof selectTime === "function");
 
     // Development mode
     if (!__PRODUCTION__) {
@@ -32,16 +22,18 @@ function TimeSelect(props) {
                         type="datetime-local"
                         value={
                             // default time value
-                            timeFormat(props.time)
+                            timeFormat(time)
                         }
                         min={timeFormat(new Date()).slice(0, 10) + "T00:00"}
                         max={
                             // PTX API only provide date within 60 days
-                            timeFormat(addDay(new Date(), 60)).slice(0, 10) + "T23:59"
+                            timeFormat(addDays(new Date(), 60)).slice(0, 10) + "T23:59"
                         }
                         onChange={
                             (event) => {
-                                props.selectTime(new Date(event.target.value));
+                                if (isSelectTimeFunctionValid) {
+                                    selectTime(new Date(event.target.value));
+                                }
                             }
                         }
                     />
@@ -49,7 +41,11 @@ function TimeSelect(props) {
                         type="button"
                         variant="outline-secondary"
                         onClick={
-                            () => { props.selectTime(new Date()) }
+                            () => {
+                                if (isSelectTimeFunctionValid) {
+                                    selectTime(new Date());
+                                }
+                            }
                         }
                     >
                         {textLang.Now}

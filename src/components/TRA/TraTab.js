@@ -172,7 +172,7 @@ function TraTab() {
                 <CountyStationSelect
                     label={textLang.From}
                     countyIdx={schedule.origin.countyIdx}
-                    station={schedule.origin.stationID}
+                    stationID={schedule.origin.stationID}
                     selectCounty={selectOriginCounty}
                     selectStation={selectOriginStation}
                 />
@@ -180,7 +180,7 @@ function TraTab() {
                 <CountyStationSelect
                     label={textLang.To}
                     countyIdx={schedule.destination.countyIdx}
-                    station={schedule.destination.stationID}
+                    stationID={schedule.destination.stationID}
                     selectCounty={selectDestinationCounty}
                     selectStation={selectDestinationStation}
                 />
@@ -191,16 +191,20 @@ function TraTab() {
                 />
 
                 <ActionButtons
-                    scheduleOptions={schedule}
+                    railType={RAILTYPE_E.TRA}
+                    originStationID={schedule.origin.stationID}
+                    destinationStationID={schedule.destination.stationID}
+                    time={schedule.time}
                     handleSwap={handleSwap}
                     handleSubmit={handleScheduleResult}
-                    railType={RAILTYPE_E.TRA}
                 />
             </Form>
 
             <TrainList
-                scheduleResult={scheduleResult}
                 railType={RAILTYPE_E.TRA}
+                originStationName={scheduleResult.origin.stationName}
+                destinationStationName={scheduleResult.destination.stationName}
+                trains={scheduleResult.trains}
             />
         </Container>
     );
