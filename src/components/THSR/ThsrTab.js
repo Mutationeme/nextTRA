@@ -92,11 +92,7 @@ function ThsrTab() {
             trains: []
         };
 
-        if (result !== undefined &&
-            result !== null &&
-            result.length !== undefined &&
-            result.length !== 0
-        ) {
+        if (Array.isArray(result) && result.length > 0) {
             newScheduleResult = {
                 origin: {
                     stationName: result[0].OriginStopTime.StationName.Zh_tw

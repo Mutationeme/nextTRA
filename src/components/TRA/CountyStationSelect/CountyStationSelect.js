@@ -79,38 +79,31 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
     }
 
     function handleCountyChange(event) {
+        const index = event?.target?.selectedIndex ?? (-1);
+
         if (isSelectCountyFunctionValid &&
-
-            event != undefined &&
-            event.target != undefined &&
-            event.target.selectedIndex != undefined &&
-
             // check if index in the range of 1 ~ length
             // seletedIndex [0] is the default blank option ([0]: "")
-            event.target.selectedIndex > 0 &&
-            event.target.selectedIndex <= stations.length
+            index > 0 &&
+            index <= stations.length
         ) {
             // selectedIndex - 1: selectedIndex to countyIndex
-            selectCounty(event.target.selectedIndex - 1);
+            selectCounty(index - 1);
         }
     }
 
     function handleStationChange(event) {
+        const stationID = event?.target?.value ?? "";
+        const index = event?.target?.selectedIndex ?? (-1);
+
         if (isSelectStationFunctionValid &&
-
-            event != undefined &&
-            event.target != undefined &&
-            event.target.value != undefined &&
-            event.target.selectedIndex != undefined &&
-
             isInputCountyIdxValid &&
-
             // check if index in the range of 1 ~ legnth ([0]: "")
-            event.target.selectedIndex > 0 &&
-            event.target.selectedIndex <= stations[countyIdx].stations.length &&
-            stations[countyIdx].stations[event.target.selectedIndex - 1].StationID === event.target.value
+            index > 0 &&
+            index <= stations[countyIdx].stations.length &&
+            stations[countyIdx].stations[index - 1].StationID === stationID
         ) {
-            selectStation(event.target.value);
+            selectStation(stationID);
         }
     }
 

@@ -18,18 +18,15 @@ function StationSelect({ label = "", stationID = "", selectStation } = {}) {
     }
 
     function handleStationChange(event) {
-        if (isSelectStationFunctionValid &&
-            
-            event !== undefined &&
-            event.target !== undefined &&
-            event.target.value !== undefined &&
-            event.target.selectedIndex !== undefined &&
+        let selectedIndex = event?.target?.selectedIndex ?? (-1);
+        let stationID = event?.target?.value ?? "";
 
-            event.target.selectedIndex > 0 &&
-            event.target.selectedIndex <= stations.length &&
-            stations[event.target.selectedIndex - 1].StationID === event.target.value 
+        if (isSelectStationFunctionValid &&
+            selectedIndex > 0 &&
+            selectedIndex <= stations.length &&
+            stations[selectedIndex - 1].StationID === stationID 
         ) {
-            selectStation(event.target.value);
+            selectStation(stationID);
         }
     }
 

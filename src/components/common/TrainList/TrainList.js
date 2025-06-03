@@ -84,14 +84,8 @@ function TrainList({
     const isTrainsValid = (Array.isArray(trains) && (trains.length > 0));
 
     function showSingleTRATrain(train) {
-        if (train === undefined ||
-            train.trainNo === undefined ||
-            train.departureTime === undefined ||
-            train.arrivalTime === undefined ||
-            (
-                railType === RAILTYPE_E.TRA &&
-                (train.trainType === undefined || train.tripLine === undefined)
-            )
+        if ((train?.trainNo ?? true) || (train?.departureTime ?? true) || (train?.arrivalTime ?? true) ||
+            (railType === RAILTYPE_E.TRA && ((train?.trainType ?? true) || (train?.tripLine ?? true)))
         ) {
             return;
         }

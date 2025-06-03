@@ -125,13 +125,9 @@ function TraTab() {
                 stationName: ""
             },
             trains: []
-        }
+        };
 
-        if (result !== undefined &&
-            result !== null &&
-            result.length !== undefined &&
-            result.length !== 0
-        ) {
+        if (Array.isArray(result) && result.length > 0) {
             newScheduleResult = {
                 origin: {
                     stationID: result[0].OriginStopTime.StationID,
