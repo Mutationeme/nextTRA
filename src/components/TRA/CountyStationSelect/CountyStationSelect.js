@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
 import stations from "../../../helpers/stationInfo/TRA/stations.json";
@@ -55,7 +55,7 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
         }
     }
 
-    function setCountyList() {
+    const countyList = useMemo(() => {
         return (
             stations.map((data, i) => {
                 return (
@@ -63,9 +63,9 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
                 );
             })
         );
-    }
+    }, []);
 
-    function setStationList() {
+    const stationList = useMemo(() => {
         if (isInputCountyIdxValid) {
             return (
                 stations[countyIdx].stations.map((data, i) => {
@@ -76,7 +76,7 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
         else {
             return null;
         }
-    }
+    }, [countyIdx]);
 
     function handleCountyChange(event) {
         const index = event?.target?.selectedIndex ?? (-1);
@@ -121,9 +121,7 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
                     value={getDefaultCounty()}
                 >
                     <option value=""></option>
-                    {
-                        setCountyList()
-                    }
+                    {countyList}
                 </Form.Select>
             </Form.Group>
             <Form.Group as={Col}>
@@ -134,9 +132,7 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
                     disabled={!isInputCountyIdxValid}
                 >
                     <option value=""></option>
-                    {
-                        setStationList()
-                    }
+                    {stationList}
                 </Form.Select>
             </Form.Group>
         </Row>

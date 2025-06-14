@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import { Form, Row } from "react-bootstrap";
 
 import stations from "../../../helpers/stationInfo/THSR/stations.json";
@@ -7,15 +7,17 @@ import "./StationSelect.css";
 
 function StationSelect({ label = "", stationID = "", selectStation } = {}) {
     const isSelectStationFunctionValid = (typeof selectStation === "function");
-    let isInputStationIdValid = false;
-    if (stationID !== "") {
-        for (let i = 0; i < stations.length; i++) {
-            if (stationID === stations[i].StationID) {
-                isInputStationIdValid = true;
-                break;
+    const isInputStationIdValid = () => {
+        if (stationID !== "") {
+            for (let i = 0; i < stations.length; i++) {
+                if (stationID === stations[i].StationID) {
+                    return true;
+                }
             }
         }
-    }
+        return false;
+    };
+
 
     function handleStationChange(event) {
         let selectedIndex = event?.target?.selectedIndex ?? (-1);
@@ -24,7 +26,7 @@ function StationSelect({ label = "", stationID = "", selectStation } = {}) {
         if (isSelectStationFunctionValid &&
             selectedIndex > 0 &&
             selectedIndex <= stations.length &&
-            stations[selectedIndex - 1].StationID === stationID 
+            stations[selectedIndex - 1].StationID === stationID
         ) {
             selectStation(stationID);
         }
@@ -39,13 +41,13 @@ function StationSelect({ label = "", stationID = "", selectStation } = {}) {
         }
     }
 
-    function setStationList() {
+    const stationList = useMemo(() => {
         return (
             stations.map((data) => {
                 return (<option key={data.StationUID} value={data.StationID}>{data.StationName.Zh_tw}</option>);
             })
         );
-    }
+    }, []);
 
     if (!__PRODUCTION__) {
     }
@@ -59,9 +61,7 @@ function StationSelect({ label = "", stationID = "", selectStation } = {}) {
                     value={getDefaultStation()}
                 >
                     <option value=""></option>
-                    {
-                        setStationList()
-                    }
+                    {stationList}
                 </Form.Select>
             </Form.Group>
         </Row>
