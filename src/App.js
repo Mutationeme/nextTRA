@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+
 // Include the bootstrap in html head to reduce the build size
 // import "bootstrap/dist/css/bootstrap.min.css";
-import { Tab, Tabs } from "react-bootstrap";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+
 import TraTab from "./components/TRA/TraTab.js";
 import ThsrTab from "./components/THSR/ThsrTab.js";
 import { NotifyToast } from "./components/common/NotifyToast/NotifyToast.js";
@@ -82,7 +85,7 @@ function App() {
                         eventKey={0}
                         title={
                             <span>
-                                <IoIosTrain color="DodgerBlue" size="1.2rem" />
+                                <IoIosTrain color="DodgerBlue" size="18" />
                                 &nbsp;{textLang.TRA}
                             </span>
                         }
@@ -94,7 +97,7 @@ function App() {
                         eventKey={1}
                         title={
                             <span>
-                                <TbTrain color="orange" size="1.2rem" />
+                                <TbTrain color="orange" size="18" />
                                 &nbsp;{textLang.THSR}
                             </span>
                         }

@@ -1,5 +1,7 @@
-import React, {useState} from "react";
-import { Toast, CloseButton } from "react-bootstrap";
+import React, { useState } from "react";
+
+import Toast from "react-bootstrap/Toast";
+import CloseButton from "react-bootstrap/CloseButton";
 
 function NotifyToastItem(props) {
     const [show, setShow] = useState(true);

@@ -5,6 +5,7 @@ const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
 //const LicensePlugin = require('webpack-license-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { DefinePlugin } = require("webpack");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 module.exports = (env, argv) => {
     const webpackConfig = {
@@ -53,7 +54,7 @@ module.exports = (env, argv) => {
             }),
             new CssMinimizerWebpackPlugin(),
             new CleanWebpackPlugin(),
-
+            new BundleAnalyzerPlugin(),
             //new LicensePlugin(),
         ],
         devServer: {

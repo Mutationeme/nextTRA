@@ -1,5 +1,8 @@
 import React, { memo, useMemo } from "react";
-import { Form, Row, Col } from "react-bootstrap";
+
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import stations from "../../../helpers/stationInfo/TRA/stations.json";
 

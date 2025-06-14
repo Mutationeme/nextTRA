@@ -1,9 +1,11 @@
 import React, { memo, useCallback, useState } from 'react';
 
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+
 // Language: zh_tw
 import textLang from "../../helpers/languages/zh_tw.json";
 
-import { Form, Container } from 'react-bootstrap';
 import { timeDifference } from "../../helpers/time/index.js";
 import { RAILTYPE_E } from '../../helpers/type/railType.js';
 

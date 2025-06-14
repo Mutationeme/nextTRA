@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { ListGroup } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup";
 import { getTravelTime } from "../../../helpers/time/index.js";
 import { RAILTYPE_E } from "../../../helpers/type/railType.js";
 import textLang from "../../../helpers/languages/zh_tw.json";
@@ -84,8 +84,11 @@ function TrainList({
     const isTrainsValid = (Array.isArray(trains) && (trains.length > 0));
 
     function showSingleTRATrain(train) {
-        if ((train?.trainNo ?? true) || (train?.departureTime ?? true) || (train?.arrivalTime ?? true) ||
-            (railType === RAILTYPE_E.TRA && ((train?.trainType ?? true) || (train?.tripLine ?? true)))
+        if (
+            (train?.trainNo === undefined) ||
+            (train?.departureTime === undefined) ||
+            (train?.arrivalTime === undefined) ||
+            (railType === RAILTYPE_E.TRA && ((train?.trainType === undefined) || (train?.tripLine === undefined)))
         ) {
             return;
         }

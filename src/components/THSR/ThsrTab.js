@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from "react";
-import { Container, Form } from "react-bootstrap";
+
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+
 import { RAILTYPE_E } from "../../helpers/type/railType.js";
 import { timeDifference } from "../../helpers/time/index.js";
 
