@@ -2,7 +2,7 @@
   "name": "nexttra",
   "version": "0.2.1",
   "private": true,
-  "homepage": "https://az801590.github.io/nextTRA",
+  "homepage": "https://mutationeme.github.io/nextTRA",
   "scripts": {
     "start": "webpack server --mode development",
     "build": "node scripts/updateStationInfo.js && webpack --mode production",
