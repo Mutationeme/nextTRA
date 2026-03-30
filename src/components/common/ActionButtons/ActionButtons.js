@@ -1,11 +1,6 @@
 import React, { memo, useContext } from "react";
 
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import "./ActionButtons.css";
-
 import { getTrainByDate as getTRATrainByDate } from "../../../request/traReq.js";
 import { getTrainByDate as getTHSRTrainByDate } from "../../../request/thsrReq.js";
 import { RAILTYPE_E } from "../../../helpers/type/railType.js";
@@ -79,38 +74,30 @@ function ActionButtons({
     // End of development mode code
 
     return (
-        <Row>
-            <Form.Group as={Col} xs="4">
-                <Form.Label>&nbsp;</Form.Label>
-                <Button
-                    variant="light"
+        <div className="action-buttons-group">
+            <div className="btn-col-swap">
+                <button
+                    className="btn btn-outline"
                     type="button"
-                    size="lg"
-                    className="fullWidth"
-                    onClick={
-                        () => {
-                            if (isHandleSwapFunctionValid) {
-                                handleSwap();
-                            }
+                    onClick={() => {
+                        if (isHandleSwapFunctionValid) {
+                            handleSwap();
                         }
-                    }
+                    }}
                 >
                     <BsArrowDownUp />
-                </Button>
-            </Form.Group>
-            <Form.Group as={Col}>
-                <Form.Label>&nbsp;</Form.Label>
-                <Button
-                    variant="dark"
+                </button>
+            </div>
+            <div className="btn-col-search">
+                <button
+                    className="btn btn-primary"
                     type="button"
-                    size="lg"
-                    className="fullWidth"
                     onClick={requestTrains}
                 >
                     <BsSearch />
-                </Button>
-            </Form.Group>
-        </Row>
+                </button>
+            </div>
+        </div>
     );
 }
 

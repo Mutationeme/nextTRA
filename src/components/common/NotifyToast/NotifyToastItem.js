@@ -1,39 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { IoMdClose } from "react-icons/io";
 
-import Toast from "react-bootstrap/Toast";
-import CloseButton from "react-bootstrap/CloseButton";
+import "./NotifyToastItem.css";
+
+const HIDE_DELAY = __PRODUCTION__ ? 3000 : 30000;
 
 function NotifyToastItem(props) {
-    const [show, setShow] = useState(true);
-    // millisecond
-    let hideDelay = 3000;
+    const [show, setShow] = useState(false);
 
-    if (!__PRODUCTION__) {
-        hideDelay = hideDelay * 10;
-    }
+    useEffect(() => {
+        // Defer visibility to avoid forced layout during initial page load
+        setShow(true);
 
-    function closeNotify(){
+        const timer = setTimeout(() => {
+            setShow(false);
+        }, HIDE_DELAY);
+        return () => clearTimeout(timer);
+    }, []);
+
+    function closeNotify() {
         setShow(false);
     }
 
-    return (
-        <Toast
-            className="align-items-center bg-opacity-75"
-            bg="danger"
-            onClose={closeNotify}
-            show={show}
-            delay={hideDelay}
-            autohide
-        >
-            <div className="d-flex">
-                <Toast.Body className="text-white">
-                    Error: {props.message}
-                </Toast.Body>
-                <CloseButton data-bs-dismiss="toast" className="me-2 m-auto" variant="white"></CloseButton>
-            </div>
-        </Toast>
-    );
+    if (!show){
+        return null;
+    }
 
+    return (
+        <div className="toast danger">
+            <div className="toast-content">
+                <span className="toast-message">
+                    {props.message}
+                </span>
+                <button className="toast-close" onClick={closeNotify}>
+                    <IoMdClose size="18" />
+                </button>
+            </div>
+        </div>
+    );
 }
 
 export default NotifyToastItem;

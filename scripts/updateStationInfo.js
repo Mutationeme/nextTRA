@@ -27,7 +27,7 @@ const thsrStationListUrl = "https://tdx.transportdata.tw/api/basic/v2/Rail/THSR/
 ** -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
 */
 function query(url) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         let parsedUrl = new URL(url);
         let options = {
             hostname: parsedUrl.hostname,
@@ -89,8 +89,13 @@ async function queryTRA() {
 
         for (let i = 0; i < stationList.Stations.length; i++) {
             let station = stationList.Stations[i];
-            let stationCounty = station.StationAddress.match(regex)[1];
 
+            let match = station.StationAddress.match(regex);
+            if (!match) {
+                continue;
+            }
+
+            let stationCounty = match[1];
             for (let j = 0; j < result.length; j++) {
                 if (result[j].county == stationCounty) {
                     result[j].stations.push({

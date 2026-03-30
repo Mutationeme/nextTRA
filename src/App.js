@@ -2,8 +2,6 @@ import React, { useState } from "react";
 
 // Include the bootstrap in html head to reduce the build size
 // import "bootstrap/dist/css/bootstrap.min.css";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 
 import TraTab from "./components/TRA/TraTab.js";
 import ThsrTab from "./components/THSR/ThsrTab.js";
@@ -69,42 +67,38 @@ THE SOFTWARE.
 import { IoIosTrain } from "react-icons/io";
 import "./App.css";
 
+const traTabKey = 0;
+const thsrTabKey = 1;
+
 function App() {
     const [tabKey, setTabKey] = useState(0);
 
     return (
         <div id="absRoot">
             <StatusProvider>
-                <Tabs
-                    activeKey={tabKey}
-                    onSelect={(key) => {
-                        setTabKey(key);
-                    }}
-                >
-                    <Tab
-                        eventKey={0}
-                        title={
-                            <span>
-                                <IoIosTrain color="DodgerBlue" size="18" />
-                                &nbsp;{textLang.TRA}
-                            </span>
-                        }
-                    >
-                        <TraTab />
-                    </Tab>
+                <div className="app-header">
+                    <h1>nextTRA</h1>
+                </div>
+                <div className="container">
+                    <div className="tab-group">
+                        <button
+                            className={`btn tab-btn tab-btn-left ${tabKey === traTabKey ? 'btn-primary' : 'btn-outline'}`}
+                            onClick={() => setTabKey(traTabKey)}
+                        >
+                            <IoIosTrain color={tabKey === traTabKey ? "white" : "DodgerBlue"} size="18" />
+                            &nbsp;{textLang.TRA}
+                        </button>
+                        <button
+                            className={`btn tab-btn tab-btn-right ${tabKey === thsrTabKey ? 'btn-primary' : 'btn-outline'}`}
+                            onClick={() => setTabKey(thsrTabKey)}
+                        >
+                            <TbTrain color={tabKey === thsrTabKey ? "white" : "orange"} size="18" />
+                            &nbsp;{textLang.THSR}
+                        </button>
+                    </div>
 
-                    <Tab
-                        eventKey={1}
-                        title={
-                            <span>
-                                <TbTrain color="orange" size="18" />
-                                &nbsp;{textLang.THSR}
-                            </span>
-                        }
-                    >
-                        <ThsrTab />
-                    </Tab>
-                </Tabs>
+                    {tabKey === traTabKey ? <TraTab /> : <ThsrTab />}
+                </div>
                 <NotifyToast />
                 <Footer />
             </StatusProvider>

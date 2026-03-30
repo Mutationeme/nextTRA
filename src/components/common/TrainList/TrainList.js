@@ -1,10 +1,8 @@
 import React, { memo } from "react";
-import ListGroup from "react-bootstrap/ListGroup";
 import { getTravelTime } from "../../../helpers/time/index.js";
 import { RAILTYPE_E } from "../../../helpers/type/railType.js";
 import textLang from "../../../helpers/languages/zh_tw.json";
 import "./TrainList.css";
-import { ERRORTYPE_E } from "../../../helpers/type/errorType.js";
 
 /*
 ** Convert the tripLine number to readable information.
@@ -27,7 +25,15 @@ function tripLineToText(tripLine) {
 */
 function filterTrainType(trainTypeString) {
     const regExp = /([\u4E00-\u9FFF]+)|(\(([^\(\)]+)\))/g;
-    const matches = [...trainTypeString.matchAll(regExp)];
+    //const matches = [...trainTypeString.matchAll(regExp)];
+    let match;
+    const matches = [];
+    
+    // Using exec loop for compatibility with older engines like iOS 12 (Safari 12)
+    while ((match = regExp.exec(trainTypeString)) !== null) {
+        matches.push(match);
+    }
+
     let type = "";
 
     /*
@@ -90,13 +96,12 @@ function TrainList({
             (train?.arrivalTime === undefined) ||
             (railType === RAILTYPE_E.TRA && ((train?.trainType === undefined) || (train?.tripLine === undefined)))
         ) {
-            return;
+            return null;
         }
 
         let singleTrainType = "";
         let tripLineText = "";
-        let railStyle = "railStyle";
-        let travelTimeElement = travelTimeToElement(train.departureTime, train.arrivalTime);
+        let travelTime = getTravelTime(train.departureTime, train.arrivalTime);
 
         if (railType === RAILTYPE_E.TRA) {
             singleTrainType = filterTrainType(train.trainType);
@@ -104,46 +109,30 @@ function TrainList({
         }
 
         return (
-            <ListGroup horizontal key={train.trainNo} className="train">
-                <ListGroup.Item className={`trainNo ${railStyle}`}>
-                    <div className="textAlignCenter">{singleTrainType}</div>
-                    <div className="textAlignCenter">{train.trainNo}</div>
-                </ListGroup.Item>
-                <ListGroup.Item className={`trainDepart ${railStyle}`}>
-                    <div className="textAlignCenter">{originStationName}</div>
-                    <div className="textAlignCenter">{train.departureTime}</div>
-                </ListGroup.Item>
-                <ListGroup.Item className={`trainArrive ${railStyle}`}>
-                    <div className="textAlignCenter">{destinationStationName}</div>
-                    <div className="textAlignCenter">{train.arrivalTime}</div>
-                </ListGroup.Item>
-                <ListGroup.Item className={`trainTripLine ${railStyle}`}>
-                    <div className="textAlignCenter">{tripLineText}</div>
-                </ListGroup.Item>
-                <ListGroup.Item className={`trainTravelTime ${railStyle}`}>
-                    {travelTimeElement}
-                </ListGroup.Item>
-            </ListGroup>
-        );
-    }
-
-    /*
-    ** Style the time in chinese as the format: XX時YY分.
-    */
-    function travelTimeToElement(departureTime, arrivalTime) {
-        let travelTime = getTravelTime(departureTime, arrivalTime);
-
-        return (
-            <div>
-                <div className="textAlignCenter">
-                    {
-                        travelTime[0].toString().padStart(2, "0") + textLang.Hour
-                    }
+            <div key={train.trainNo} className="card train-item-card">
+                <div className="train-info-section">
+                    <div className="train-no">{train.trainNo}</div>
+                    <div className="train-meta-text">
+                        {singleTrainType} {tripLineText}
+                    </div>
                 </div>
-                <div className="textAlignCenter">
-                    {
-                        travelTime[1].toString().padStart(2, "0") + textLang.Minute
-                    }
+
+                <div className="train-schedule-section">
+                    <div className="time-block">
+                        <div className="departure-time">{train.departureTime}</div>
+                        <div className="station-label">{originStationName}</div>
+                    </div>
+
+                    <div className="train-path-arrow">➜</div>
+
+                    <div className="time-block">
+                        <div className="departure-time">{train.arrivalTime}</div>
+                        <div className="station-label">{destinationStationName}</div>
+                    </div>
+
+                    <div className="duration-block">
+                        {travelTime[0].toString().padStart(2, "0")}{textLang.Hour}{travelTime[1].toString().padStart(2, "0")}{textLang.Minute}
+                    </div>
                 </div>
             </div>
         );
@@ -153,6 +142,7 @@ function TrainList({
         if (isOriginStationNameValid && isDestinationStationNameValid && isTrainsValid) {
             return (trains.map(showSingleTRATrain));
         }
+        return null;
     }
 
     // Development mode

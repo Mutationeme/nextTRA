@@ -1,7 +1,4 @@
-import React, { useState, useCallback } from "react";
-
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
+import React, { memo, useState, useCallback } from "react";
 
 import { RAILTYPE_E } from "../../helpers/type/railType.js";
 import { timeDifference } from "../../helpers/time/index.js";
@@ -127,8 +124,9 @@ function ThsrTab() {
     // End of development mode code
 
     return (
-        <Container>
-            <Form>
+        <div className="tab-content-wrapper">
+            {/* Query Card */}
+            <div className="card query-card">
                 <StationSelect
                     label={textLang.From}
                     stationID={schedule.origin.stationID}
@@ -154,7 +152,7 @@ function ThsrTab() {
                     handleSwap={handleSwap}
                     handleSubmit={handleScheduleResult}
                 />
-            </Form>
+            </div>
 
             <TrainList
                 railType={RAILTYPE_E.THSR}
@@ -162,8 +160,8 @@ function ThsrTab() {
                 destinationStationName={scheduleResult.destination.stationName}
                 trains={scheduleResult.trains}
             />
-        </Container>
+        </div>
     );
 }
 
-export default ThsrTab;
+export default memo(ThsrTab);

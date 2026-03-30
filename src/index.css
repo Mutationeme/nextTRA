@@ -1,13 +1,217 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --tra-blue: #003399;
+  --thsr-orange: #f15a24;
+  --bg-color: #f4f7f9;
+  --card-bg: #ffffff;
+  --text-main: #333333;
+  --text-muted: #666666;
+  --border-color: #dddddd;
+  --accent-color: #007aff;
+  --danger: #d9534f;
+  --success: #5cb85c;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+/* Layout Container */
+.container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+/* Header Styling */
+.app-header {
+  background-color: var(--tra-blue);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 0 0 15px 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.3rem; /* Fallback for iOS 12 */
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+  font-weight: 700;
+}
+
+/* Search Form Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: 1px solid var(--border-color);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+select, input {
+  width: 100%;
+  height: 48px; /* High hit-target for older touch screens */
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  -webkit-appearance: none;
+  appearance: none; /* Modern look */
+}
+
+select:disabled, input:disabled {
+  cursor: not-allowed;
+  background-color: #f2f2f2;
+  opacity: 0.6;
+  filter: blur(0.5px);
+}
+
+select {
+  text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.tab-content-wrapper {
+  padding-top: 10px;
+}
+
+.status-tag {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Helper for Flex Layouts */
+.d-flex { display: flex; }
+.justify-between { justify-content: space-between; }
+
+/* Input Group (Input + Button attached) */
+.input-group {
+  display: flex;
+  width: 100%;
+}
+
+.input-group input {
+  flex: 1;
+  width: auto;
+  min-width: 0; /* Allows the input to shrink below its intrinsic width in flex containers */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group .btn-append {
+  width: auto;
+  padding: 0 15px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -1px; /* Overlap borders */
+}
+
+/* Responsive Adjustments for Mobile Viewports */
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .card {
+    padding: 12px;
+  }
+
+  .train-item {
+    padding: 12px 8px;
+  }
+
+  .train-arrow {
+    margin: 0 4px;
+    font-size: 0.9rem;
+  }
+
+  .train-travel-time {
+    font-size: 0.85rem;
+  }
+
+  .horizontal-group {
+    gap: 8px;
+  }
+
+  .input-group input {
+    padding: 10px 6px;
+    font-size: 0.8rem;
+  }
+
+  .input-group .btn-append {
+    padding: 0 10px;
+  }
+}
+
+/* Specific fixes for ultra-narrow devices like iPhone 5s (320px) */
+@media (max-width: 350px) {
+  .app-header {
+    padding: 15px 10px;
+  }
+
+  .tab-btn {
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
+
+  .train-arrow {
+    margin: 0 5px;
+    font-size: 0.8rem;
+  }
+
+  .train-travel-time {
+    font-size: 0.8rem;
+  }
+
+  .btn-append {
+    padding: 0 8px;
+  }
 }

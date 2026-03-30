@@ -1,36 +1,22 @@
 import React, { memo, useMemo } from "react";
-
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-
 import stations from "../../../helpers/stationInfo/THSR/stations.json";
-
 import "./StationSelect.css";
+import textLang from "../../../helpers/languages/zh_tw.json";
 
 function StationSelect({ label = "", stationID = "", selectStation } = {}) {
     const isSelectStationFunctionValid = (typeof selectStation === "function");
-    const isInputStationIdValid = () => {
-        if (stationID !== "") {
-            for (let i = 0; i < stations.length; i++) {
-                if (stationID === stations[i].StationID) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    };
-
+    const isInputStationIdValid = useMemo(() => stations.some(s => s.StationID === stationID), [stationID]);
 
     function handleStationChange(event) {
-        let selectedIndex = event?.target?.selectedIndex ?? (-1);
-        let stationID = event?.target?.value ?? "";
+        const selectedIndex = event?.target?.selectedIndex ?? (-1);
+        const val = event?.target?.value ?? "";
 
         if (isSelectStationFunctionValid &&
             selectedIndex > 0 &&
             selectedIndex <= stations.length &&
-            stations[selectedIndex - 1].StationID === stationID
+            stations[selectedIndex - 1].StationID === val
         ) {
-            selectStation(stationID);
+            selectStation(val);
         }
     }
 
@@ -55,18 +41,16 @@ function StationSelect({ label = "", stationID = "", selectStation } = {}) {
     }
 
     return (
-        <Row>
-            <Form.Group>
-                <Form.Label>{label}</Form.Label>
-                <Form.Select
-                    onChange={handleStationChange}
-                    value={getDefaultStation()}
-                >
-                    <option value=""></option>
-                    {stationList}
-                </Form.Select>
-            </Form.Group>
-        </Row>
+        <div className="form-group">
+            <label>{label}</label> {/* Label is now outside the select for better styling control */}
+            <select
+                onChange={handleStationChange}
+                value={getDefaultStation()}
+            >
+                <option value=""></option>
+                {stationList}
+            </select>
+        </div>
     );
 }
 

@@ -1,0 +1,31 @@
+/* Input Group (Input + Button attached) */
+.input-group {
+  display: flex;
+  width: 100%;
+}
+
+.input-group input {
+  flex: 1;
+  width: auto;
+  min-width: 0; /* Allows the input to shrink below its intrinsic width in flex containers */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group .btn-append {
+  width: auto;
+  padding: 0 15px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -1px; /* Overlap borders */
+}
+
+@media (max-width: 480px) {
+  .input-group input {
+    padding: 10px 6px;
+    font-size: 0.8rem;
+  }
+  .input-group .btn-append {
+    padding: 0 10px;
+  }
+}

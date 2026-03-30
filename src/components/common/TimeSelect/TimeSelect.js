@@ -1,11 +1,5 @@
 import React, { memo } from "react";
 
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
-import Button from "react-bootstrap/Button";
-
 import { timeFormat, addDays } from "../../../helpers/time";
 
 // Language: zh_tw
@@ -20,45 +14,41 @@ function TimeSelect({ time = new Date(), selectTime } = {}) {
     // End of development mode code
 
     return (
-        <Row>
-            <Form.Group as={Col}>
-                <Form.Label>{textLang.Date}</Form.Label>
-                <InputGroup>
-                    <Form.Control
-                        type="datetime-local"
-                        value={
-                            // default time value
-                            timeFormat(time)
-                        }
-                        min={timeFormat(new Date()).slice(0, 10) + "T00:00"}
-                        max={
-                            // PTX API only provide date within 60 days
-                            timeFormat(addDays(new Date(), 60)).slice(0, 10) + "T23:59"
-                        }
-                        onChange={
-                            (event) => {
-                                if (isSelectTimeFunctionValid) {
-                                    selectTime(new Date(event.target.value));
-                                }
+        <div className="form-group">
+            <label>{textLang.Date}</label>
+            <div className="input-group">
+                <input
+                    type="datetime-local"
+                    value={
+                        // default time value
+                        timeFormat(time)
+                    }
+                    min={timeFormat(new Date()).slice(0, 10) + "T00:00"}
+                    max={
+                        // PTX API only provide date within 60 days
+                        timeFormat(addDays(new Date(), 60)).slice(0, 10) + "T23:59"
+                    }
+                    onChange={
+                        (event) => {
+                            if (isSelectTimeFunctionValid) {
+                                selectTime(new Date(event.target.value));
                             }
                         }
-                    />
-                    <Button
-                        type="button"
-                        variant="outline-secondary"
-                        onClick={
-                            () => {
-                                if (isSelectTimeFunctionValid) {
-                                    selectTime(new Date());
-                                }
-                            }
+                    }
+                />
+                <button
+                    className="btn btn-outline btn-append"
+                    type="button"
+                    onClick={() => {
+                        if (isSelectTimeFunctionValid) {
+                            selectTime(new Date());
                         }
-                    >
-                        {textLang.Now}
-                    </Button>
-                </InputGroup>
-            </Form.Group>
-        </Row>
+                    }}
+                >
+                    {textLang.Now}
+                </button>
+            </div>
+        </div>
     );
 }
 

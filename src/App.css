@@ -1,17 +1,31 @@
 #absRoot {
     padding: 5vh 10% 0 10%;
 }
-
-.nav-tabs {
-    border-bottom: 0;
+@media (max-width: 480px) {
+    #absRoot {
+        padding: 2vh 10px 0 10px;
+    }
 }
 
-.nav-link {
-    color: black;
+/* Tab Selection Group (App.js) */
+.tab-group {
+  display: flex;
+  margin-bottom: 20px;
+}
+.tab-btn {
+  flex: 1;
+  height: 48px; /* Ensure consistent hit target with other form elements */
+}
+.tab-btn-left {
+  border-radius: 8px 0 0 8px;
+}
+.tab-btn-right {
+  border-radius: 0 8px 8px 0;
 }
 
-.tab-content {
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 0 6px 6px 6px;
+@media (max-width: 350px) {
+  .tab-btn {
+    font-size: 0.9rem;
+    padding: 0 5px;
+  }
 }

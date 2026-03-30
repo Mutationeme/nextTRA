@@ -1,44 +1,103 @@
-.textAlignCenter {
+.trainList {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.train-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: transform 0.1s ease;
+    /* Performance: Isolate layout/paint logic for this element */
+    contain: content;
+    /* Improve scrolling performance by hinting rendering intent */
+    content-visibility: auto;
+}
+
+.train-item-card:active {
+    transform: scale(0.98);
+}
+
+.train-info-section {
+    flex: 0 0 85px;
+}
+
+.train-no {
+    font-weight: 800;
+    font-size: 1.1rem; /* Fallback for iOS 12 */
+    font-size: clamp(1rem, 4.5vw, 1.2rem);
+    color: var(--tra-blue);
+}
+
+.train-meta-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.train-schedule-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+}
+
+.time-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.departure-time {
+    font-size: 1.1rem; /* Fallback for iOS 12 */
+    font-size: clamp(1.05rem, 4vw, 1.2rem);
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.station-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    max-width: 65px; /* Prevent long names from stretching the flex item */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: center;
 }
 
-.trainList {
-    margin: 2rem 0 1rem 0;
+.train-path-arrow {
+    color: var(--border-color);
+    font-size: 0.9rem;
+    margin: 0 4px;
 }
 
-.train {
-    margin: 1vh 0;
+.duration-block {
+    min-width: 65px;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--tra-blue);
 }
 
-.trainNo {
-    padding: 0.5rem;
-    width: 25%;
+/* RWD for iPhone 12 mini and Pixel 3a */
+@media (max-width: 400px) {
+    .train-item-card { padding: 12px 10px; }
+    .train-schedule-section { padding-left: 5px; }
+    .duration-block { min-width: 55px; font-size: 0.8rem; }
 }
 
-.trainDepart {
-    padding: 0.5rem;
-    width: 20%;
-}
-
-.trainArrive {
-    padding: 0.5rem;
-    width: 20%;
-}
-
-.trainTripLine {
-    padding: 0.5rem;
-    width: 10%;
-}
-
-.trainTravelTime {
-    padding: 0.5rem;
-    width: 25%;
-}
-
-.railStyle {
-    background-color: #f2f2f2;
-}
-
-.thsrStyle {
-    background-color: #ffe6cc;
+/* Specific fix for iPhone 5s (320px) */
+@media (max-width: 330px) {
+    .train-info-section { flex: 0 0 70px; }
+    .train-path-arrow { margin: 0 2px; }
+    .duration-block { display: none; }
 }

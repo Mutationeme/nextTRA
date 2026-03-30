@@ -8,12 +8,16 @@ const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 module.exports = (env, argv) => {
+    const isProduction = argv && argv.mode === "production";
+
     const webpackConfig = {
-        mode: "development",
-        entry: "./src/index.js",
+        mode: isProduction ? "production" : "development",
+        entry: {
+            bundle: "./src/index.js"
+        },
         output: {
             path: path.resolve(__dirname, "build"),
-            filename: "js/bundle.js"
+            filename: isProduction ? "js/[name].[contenthash].js" : "js/[name].js"
         },
         module: {
             rules: [
@@ -43,20 +47,32 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new DefinePlugin({
-                __PRODUCTION__: ((argv != undefined) && (argv.mode === "production")) ? true: false,
+                __PRODUCTION__: isProduction,
             }),
             new HtmlWebpackPlugin({
                 template: "./public/index.html",
                 // favicon: "./public/favicon.ico",
             }),
             new MiniCssExtractPlugin({
-                filename: "css/style.css"
+                filename: isProduction ? "css/[name].[contenthash].css" : "css/[name].css"
             }),
             new CssMinimizerWebpackPlugin(),
             new CleanWebpackPlugin(),
             new BundleAnalyzerPlugin(),
             //new LicensePlugin(),
         ],
+        optimization: {
+            splitChunks: {
+                chunks: 'all',
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendors',
+                        chunks: 'all',
+                    },
+                },
+            },
+        },
         devServer: {
             static: {
                 directory: path.resolve(__dirname, "public"),

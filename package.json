@@ -2,6 +2,9 @@
   "name": "nexttra",
   "version": "0.2.1",
   "private": true,
+  "sideEffects": [
+    "*.css"
+  ],
   "homepage": "https://mutationeme.github.io/nextTRA",
   "scripts": {
     "start": "webpack server --mode development",
@@ -10,9 +13,7 @@
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
-    "bootstrap": "^5.3.2",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.10.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.3.0",
     "react-toastify": "^10.0.5"

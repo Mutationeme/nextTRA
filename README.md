@@ -4,3 +4,13 @@
 
 
 資料來源: 交通部TDX平台
+
+---
+## TODO:
+- [X] RWD, iphone5s, iphone 12 mini, pixel 3a
+- [X] Refactor the css to make it strutureable and readable like the modern web.
+- [X] Analyze the UI performance on older devices
+- [ ] Don't clear the result when switch back from one tab to another TRA or THSR tab.
+- [ ] build warning: size too big
+- [ ] Acknowledge
+- [ ] No resulit UI

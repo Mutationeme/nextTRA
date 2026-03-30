@@ -1,13 +1,6 @@
 import React, { memo, useMemo } from "react";
-
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-
 import stations from "../../../helpers/stationInfo/TRA/stations.json";
-
 import "./CountyStationSelect.css";
-
 
 // Station list under county is sorted ascented.
 // Binary search the target stationID and return the station index.
@@ -116,29 +109,29 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
     // End of development mode code
 
     return (
-        <Row>
-            <Form.Group as={Col}>
-                <Form.Label>{label}</Form.Label>
-                <Form.Select
+        <div className="horizontal-group">
+            <div className="form-group flex-1">
+                <label>{label}</label>
+                <select
                     onChange={handleCountyChange}
                     value={getDefaultCounty()}
                 >
                     <option value=""></option>
                     {countyList}
-                </Form.Select>
-            </Form.Group>
-            <Form.Group as={Col}>
-                <Form.Label>&nbsp;</Form.Label>
-                <Form.Select
+                </select>
+            </div>
+            <div className="form-group flex-1">
+                <label>&nbsp;</label>
+                <select
                     onChange={handleStationChange}
                     value={getDefaultStation()}
                     disabled={!isInputCountyIdxValid}
                 >
                     <option value=""></option>
                     {stationList}
-                </Form.Select>
-            </Form.Group>
-        </Row>
+                </select>
+            </div>
+        </div>
     );
 }
 

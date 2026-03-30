@@ -1,11 +1,6 @@
 import React, { memo, useCallback, useState } from 'react';
 
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-
-// Language: zh_tw
 import textLang from "../../helpers/languages/zh_tw.json";
-
 import { timeDifference } from "../../helpers/time/index.js";
 import { RAILTYPE_E } from '../../helpers/type/railType.js';
 
@@ -165,8 +160,9 @@ function TraTab() {
     // End of development mode code
 
     return (
-        <Container>
-            <Form>
+        <div className="tab-content-wrapper">
+            {/* Query Card */}
+            <div className="card query-card">
                 <CountyStationSelect
                     label={textLang.From}
                     countyIdx={schedule.origin.countyIdx}
@@ -196,7 +192,7 @@ function TraTab() {
                     handleSwap={handleSwap}
                     handleSubmit={handleScheduleResult}
                 />
-            </Form>
+            </div>
 
             <TrainList
                 railType={RAILTYPE_E.TRA}
@@ -204,7 +200,7 @@ function TraTab() {
                 destinationStationName={scheduleResult.destination.stationName}
                 trains={scheduleResult.trains}
             />
-        </Container>
+        </div>
     );
 }
 

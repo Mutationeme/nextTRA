@@ -1,3 +1,49 @@
-.fullWidth {
-    width: 100%;
+.action-buttons-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn:active {
+  opacity: 0.7;
+}
+
+/* Specific button styles */
+.btn-primary {
+  background-color: var(--tra-blue);
+  color: white;
+}
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--tra-blue);
+  color: var(--tra-blue);
+}
+
+.btn-col-swap {
+    flex: 0 0 30%;
+}
+
+.btn-col-search {
+    flex: 1;
+}
+
+/* Narrow screen optimization */
+@media (max-width: 350px) {
+    .btn-col-swap {
+        flex: 0 0 50px; /* Fixed width for icon on ultra-narrow screens */
+    }
 }
