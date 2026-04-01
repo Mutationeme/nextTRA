@@ -32,7 +32,8 @@ function ThsrTab() {
             stationID: -1,
             stationName: ""
         },
-        trains: []
+        trains: [],
+        isSearchPerformed: false
     });
 
     const selectOriginStation = useCallback((id) => {
@@ -89,7 +90,8 @@ function ThsrTab() {
                 stationID: -1,
                 stationName: ""
             },
-            trains: []
+            trains: [],
+            isSearchPerformed: false
         };
 
         if (Array.isArray(result) && result.length > 0) {
@@ -115,6 +117,7 @@ function ThsrTab() {
             }
         }
 
+        newScheduleResult.isSearchPerformed = true;
         setScheduleResult(newScheduleResult);
     }, []);
 
@@ -159,6 +162,7 @@ function ThsrTab() {
                 originStationName={scheduleResult.origin.stationName}
                 destinationStationName={scheduleResult.destination.stationName}
                 trains={scheduleResult.trains}
+                isSearchPerformed={scheduleResult.isSearchPerformed}
             />
         </div>
     );

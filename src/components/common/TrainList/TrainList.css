@@ -5,6 +5,12 @@
     gap: 12px;
 }
 
+.no-result-card {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+
 .train-item-card {
     display: flex;
     justify-content: space-between;

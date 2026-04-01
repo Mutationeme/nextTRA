@@ -83,7 +83,8 @@ function TrainList({
     railType = RAILTYPE_E.NO_RAIL,
     originStationName = "",
     destinationStationName = "",
-    trains = []
+    trains = [],
+    isSearchPerformed = false
 } = {}) {
     const isOriginStationNameValid = ((typeof originStationName === "string") && (originStationName !== ""));
     const isDestinationStationNameValid = ((typeof destinationStationName === "string") && (destinationStationName !== ""));
@@ -141,6 +142,14 @@ function TrainList({
     function showScheduleResult() {
         if (isOriginStationNameValid && isDestinationStationNameValid && isTrainsValid) {
             return (trains.map(showSingleTRATrain));
+        }
+
+        if (isSearchPerformed) {
+            return (
+                <div className="card no-result-card">
+                    {textLang.NoResult}
+                </div>
+            );
         }
         return null;
     }

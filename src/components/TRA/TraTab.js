@@ -32,7 +32,8 @@ function TraTab() {
             stationID: -1,
             stationName: ""
         },
-        trains: []
+        trains: [],
+        isSearchPerformed: false
     });
 
     const selectOriginCounty = useCallback((index) => {
@@ -121,7 +122,8 @@ function TraTab() {
                 stationID: -1,
                 stationName: ""
             },
-            trains: []
+            trains: [],
+            isSearchPerformed: false
         };
 
         if (Array.isArray(result) && result.length > 0) {
@@ -151,6 +153,7 @@ function TraTab() {
             }
         }
 
+        newScheduleResult.isSearchPerformed = true;
         setScheduleResult(newScheduleResult);
     }, []);
 
@@ -199,6 +202,7 @@ function TraTab() {
                 originStationName={scheduleResult.origin.stationName}
                 destinationStationName={scheduleResult.destination.stationName}
                 trains={scheduleResult.trains}
+                isSearchPerformed={scheduleResult.isSearchPerformed}
             />
         </div>
     );
