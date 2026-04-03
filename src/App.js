@@ -97,7 +97,12 @@ function App() {
                         </button>
                     </div>
 
-                    {tabKey === traTabKey ? <TraTab /> : <ThsrTab />}
+                    <div style={{ display: tabKey === traTabKey ? "block" : "none" }}>
+                        <TraTab />
+                    </div>
+                    <div style={{ display: tabKey === thsrTabKey ? "block" : "none" }}>
+                        <ThsrTab />
+                    </div>
                 </div>
                 <NotifyToast />
                 <Footer />
