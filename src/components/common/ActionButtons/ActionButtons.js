@@ -8,12 +8,6 @@ import { RAILTYPE_E } from "../../../helpers/type/railType.js";
 import { notifyError } from "../../common/NotifyToast/NotifyToast.js";
 import { StatusContext } from "../../../context/statusContext.js";
 
-// Bootstrap icons
-/*!
- * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
- * Copyright 2019-2024 The Bootstrap Authors
- * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
- */
 import { BsArrowDownUp, BsSearch } from "react-icons/bs";
 import { ERRORTYPE_E } from "../../../helpers/type/errorType.js";
 

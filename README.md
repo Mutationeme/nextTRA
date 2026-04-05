@@ -10,4 +10,15 @@ Data source from TDX.
 ---
 ## TODO:
 - [ ] build warning: size too big
-- [ ] Acknowledge
+    - [ ] lazt import thsr (?)
+    - split react-dom / core-js package
+    - UglifyJsPlugin()
+        ```javascript
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                comments: false
+            }
+        })
+        ```
+    - compression-webpack-plugin
