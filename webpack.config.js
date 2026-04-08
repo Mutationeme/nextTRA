@@ -8,6 +8,9 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { EXTRA_LICENSE_ENTRIES } = require("./extraLicenseNotice");
+const TerserWebpackPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 const AppendExtraLicensesPlugin = {
     apply(compiler) {
@@ -108,11 +111,17 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: "./public/index.html",
             }),
+            new CopyPlugin({
+                patterns: [{ 
+                    from: './public/favicon.ico'
+                }]
+            }),
             new MiniCssExtractPlugin({
                 filename: isProduction ? "css/[name].[contenthash].css" : "css/[name].css"
             }),
             new CssMinimizerWebpackPlugin(),
             new CleanWebpackPlugin(),
+            new CompressionPlugin(),
             new BundleAnalyzerPlugin(),
             ...(isProduction ? [
                 new LicensePlugin(),
@@ -130,6 +139,12 @@ module.exports = (env, argv) => {
                     },
                 },
             },
+            ...(isProduction ? {
+                minimize: true,
+                minimizer: [
+                    new TerserWebpackPlugin()
+                ]
+            } : {})
         },
         devServer: {
             static: {

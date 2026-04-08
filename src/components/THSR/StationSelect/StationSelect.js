@@ -1,17 +1,38 @@
-import React, { memo, useMemo } from "react";
-import stations from "../../../helpers/stationInfo/THSR/stations.json";
+import React, { memo, useMemo, useState, useEffect } from "react";
 import "./StationSelect.css";
-import textLang from "../../../helpers/languages/zh_tw.json";
+
+let stations = null;
+const stationsPromise = import(
+    /* webpackChunkName: "thsr-stations" */
+    /* webpackPreload: true */
+    "../../../helpers/stationInfo/THSR/stations.json"
+).then(module => {
+    stations = module.default;
+});
 
 function StationSelect({ label = "", stationID = "", selectStation } = {}) {
+    const [isReady, setIsReady] = useState(stations !== null);
+
+    useEffect(() => {
+        if (!isReady) {
+            stationsPromise.then(() => setIsReady(true));
+        }
+    }, []);
+
     const isSelectStationFunctionValid = (typeof selectStation === "function");
-    const isInputStationIdValid = useMemo(() => stations.some(s => s.StationID === stationID), [stationID]);
+    const isInputStationIdValid = useMemo(() => {
+        if (!isReady) {
+            return false;
+        }
+        return stations.some(s => s.StationID === stationID);
+    }, [stationID, isReady]);
 
     function handleStationChange(event) {
         const selectedIndex = event?.target?.selectedIndex ?? (-1);
         const val = event?.target?.value ?? "";
 
         if (isSelectStationFunctionValid &&
+            isReady &&
             selectedIndex > 0 &&
             selectedIndex <= stations.length &&
             stations[selectedIndex - 1].StationID === val
@@ -30,15 +51,16 @@ function StationSelect({ label = "", stationID = "", selectStation } = {}) {
     }
 
     const stationList = useMemo(() => {
+        if (!isReady) {
+            return null;
+        }
+
         return (
             stations.map((data) => {
                 return (<option key={data.StationUID} value={data.StationID}>{data.StationName.Zh_tw}</option>);
             })
         );
-    }, []);
-
-    if (!__PRODUCTION__) {
-    }
+    }, [isReady]);
 
     return (
         <div className="form-group">
@@ -46,6 +68,7 @@ function StationSelect({ label = "", stationID = "", selectStation } = {}) {
             <select
                 onChange={handleStationChange}
                 value={getDefaultStation()}
+                disabled={!isReady}
             >
                 <option value=""></option>
                 {stationList}

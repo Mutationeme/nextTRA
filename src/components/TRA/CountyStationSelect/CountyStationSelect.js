@@ -1,6 +1,14 @@
-import React, { memo, useMemo } from "react";
-import stations from "../../../helpers/stationInfo/TRA/stations.json";
+import React, { useState, useEffect, memo, useMemo } from "react";
 import "./CountyStationSelect.css";
+
+let stations = null;
+const stationsPromise = import(
+    /* webpackChunkName: "tra-stations" */
+    /* webpackPreload: true */
+    "../../../helpers/stationInfo/TRA/stations.json"
+).then(module => {
+    stations = module.default;
+});
 
 // Station list under county is sorted ascented.
 // Binary search the target stationID and return the station index.
@@ -26,7 +34,14 @@ function bsearchStationIdx(array, targetStationID, start, end) {
 }
 
 function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selectCounty, selectStation } = {}) {
-    const isInputCountyIdxValid = (countyIdx >= 0) && (countyIdx < stations.length);
+    const [isReady, setIsReady] = useState(stations !== null);
+    useEffect(() => {
+        if (!isReady) {
+            stationsPromise.then(() => setIsReady(true));
+        }
+    }, []);
+
+    const isInputCountyIdxValid = isReady ? ((countyIdx >= 0) && (countyIdx < stations.length)) : false;
     const isSelectCountyFunctionValid = (typeof selectCounty === "function");
     const isSelectStationFunctionValid = (typeof selectStation === "function");
 
@@ -52,6 +67,10 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
     }
 
     const countyList = useMemo(() => {
+        if (!isReady) {
+            return null;
+        }
+
         return (
             stations.map((data, i) => {
                 return (
@@ -59,7 +78,7 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
                 );
             })
         );
-    }, []);
+    }, [isReady]);
 
     const stationList = useMemo(() => {
         if (isInputCountyIdxValid) {
@@ -80,6 +99,7 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
         if (isSelectCountyFunctionValid &&
             // check if index in the range of 1 ~ length
             // seletedIndex [0] is the default blank option ([0]: "")
+            isReady &&
             index > 0 &&
             index <= stations.length
         ) {
@@ -103,11 +123,6 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
         }
     }
 
-    // Development mode only
-    if (!__PRODUCTION__) {
-    }
-    // End of development mode code
-
     return (
         <div className="horizontal-group">
             <div className="form-group flex-1">
@@ -115,6 +130,7 @@ function CountyStationSelect({ label = "", countyIdx = -1, stationID = "", selec
                 <select
                     onChange={handleCountyChange}
                     value={getDefaultCounty()}
+                    disabled={!isReady}
                 >
                     <option value=""></option>
                     {countyList}

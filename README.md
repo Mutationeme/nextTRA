@@ -7,18 +7,3 @@
 [nextTRA](https://az801590.github.io/nextTRA/) is a transit query system for Taiwan Railway (TRA) and High-Speed Rail (THSR). The application is engineered to provide a modern, responsive experience on legacy hardware and older mobile browsers by minimizing performance overhead and maximizing efficiency.
 
 Data source from TDX.
----
-## TODO:
-- [ ] build warning: size too big
-    - [ ] lazt import thsr (?)
-    - split react-dom / core-js package
-    - UglifyJsPlugin()
-        ```javascript
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-                comments: false
-            }
-        })
-        ```
-    - compression-webpack-plugin
